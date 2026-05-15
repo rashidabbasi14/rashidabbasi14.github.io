@@ -3,200 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senior Software Engineer | CoreLogic Systems</title>
+    <title>Senior Software Engineer | Rashid Ahmed Abbasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #003366; /* Deep Navy */
-            --accent: #00a8cc; /* Tech Blue */
-            --bg: #f8f9fa;
-            --text: #333;
-            --white: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        /* Navigation */
-        nav {
-            background: var(--primary);
-            color: var(--white);
-            padding: 1rem 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo { font-weight: bold; font-size: 1.4rem; letter-spacing: 1px; }
-
-        /* Hero Section */
-        header {
-            padding: 80px 5%;
-            background: linear-gradient(135deg, var(--primary) 0%, #001a33 100%);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .profile-img {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 4px solid var(--accent);
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-
-        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        header p { font-size: 1.1rem; color: #a3c2db; max-width: 600px; margin: 0 auto 20px; }
-
-        .btn {
-            background: var(--accent);
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .btn:hover { background: #007ea7; }
-
-        /* Section Container */
-        .container { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
-        h2 { border-left: 5px solid var(--accent); padding-left: 15px; margin-bottom: 30px; color: var(--primary); }
-
-        /* Grid Layouts */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-
-        /* Cards */
-        .card {
-            background: var(--white);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .card:hover { transform: translateY(-5px); }
-
-        /* Projects */
-        .project-tags { margin-top: 15px; }
-        .tag {
-            background: #e1e8ed;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-            color: var(--primary);
-        }
-
-        /* Timeline (Education/Work) */
-        .timeline-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }
-        .timeline-date { font-weight: bold; color: var(--accent); font-size: 0.9rem; }
-
-        /* Mobile Friendly */
-        @media (max-width: 768px) {
-            header h1 { font-size: 1.8rem; }
-            nav { flex-direction: column; gap: 10px; }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v10/font/simple-icons.min.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-
-    <nav>
-        <div class="logo">CORELOGIC SYSTEMS</div>
-        <div>
-            <a href="#projects" style="color:white; margin-right:20px; text-decoration:none;">Projects</a>
-            <a href="#contact" style="color:white; text-decoration:none;">Contact</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Rashid Ahmed Abbasi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#employment">Employment</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <header>
-        <img src="your-photo.jpg" alt="Profile Picture" class="profile-img">
-        <h1>Full-Stack Software Engineer</h1>
-        <p>Expert in .NET Core, React, and Banking-Grade Financial Systems. Delivering scalable architecture for mission-critical applications.</p>
-        <div style="margin-top: 25px;">
-            <a href="#contact" class="btn">Hire Me on Upwork</a>
+    <header id="home" class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <img src="uploads/pp.png" alt="Profile Picture" class="profile-img rounded-circle border border-4 border-info mb-4">
+            <h1 class="display-5 fw-semibold">Full-Stack Software Engineer</h1>
+            <p class="lead text-white-75 mx-auto" style="max-width: 680px;">Expert in .NET Core, React, and Banking-Grade Financial Systems. Delivering scalable architecture for mission-critical applications.</p>
+            <div class="hero-links d-flex flex-wrap justify-content-center align-items-center gap-2 mt-4">
+                <div class="link-group d-flex flex-wrap align-items-center gap-2">
+                    <a id="hero-facebook" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f me-2"></i>Facebook</a>
+                    <a id="hero-x" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-x me-2"></i></a>
+                    <a id="hero-instagram" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram me-2"></i>Instagram</a>
+                </div>
+                <div class="divider d-none d-md-block"></div>
+                <div class="link-group d-flex flex-wrap align-items-center gap-2">
+                    <a id="hero-upwork" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="si si-upwork me-2"></i>Upwork</a>
+                    <a id="hero-linkedin" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in me-2"></i>LinkedIn</a>
+                    <a id="hero-github" href="#" class="btn btn-outline-light btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-github me-2"></i>GitHub</a>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <h2>About Me</h2>
-        <div class="card">
-            <p>Senior Software Engineer with over 5 years of experience in the fintech and product sectors. Specialized in building high-concurrency systems using .NET Core, Laravel, and React. I focus on logic-driven development and system-to-system integrations.</p>
-        </div>
-    </div>
-
-    <div class="container" id="projects">
-        <h2>Key Projects</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Fintech API Integration</h3>
-                <p>Designed and optimized high-stakes API layers for banking operations using T24 Temenos and IRIS.</p>
-                <div class="project-tags">
-                    <span class="tag">.NET Core</span>
-                    <span class="tag">SQL Server</span>
-                </div>
-            </div>
-            <div class="card">
-                <h3>Scalable SaaS Dashboard</h3>
-                <p>Built a real-time monitoring system with React and Node.js for managing solar energy efficiency.</p>
-                <div class="project-tags">
-                    <span class="tag">React</span>
-                    <span class="tag">Node.js</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="grid">
-            <div>
-                <h2>Education</h2>
-                <div class="card">
-                    <div class="timeline-item">
-                        <div class="timeline-date">Graduated 2021</div>
-                        <strong>BS in Computer Science</strong>
-                        <p>FAST NUCES - Karachi</p>
+    <main>
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-8">
+                        <h2>About Me</h2>
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <p class="mb-0">Senior Software Engineer with over 5 years of experience in the fintech and product sectors. Specialized in building high-concurrency systems using .NET Core, Laravel, and React. I focus on logic-driven development and system-to-system integrations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h2>Education</h2>
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Graduated 2021</div>
+                                    <strong>BS in Computer Science</strong>
+                                    <p class="mb-0">FAST NUCES - Karachi</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <h2>Certifications</h2>
-                <div class="card">
-                    <div class="timeline-item">
-                        <strong>Full-Stack Mastery Certificate</strong>
-                        <p>Advanced Web Architecture</p>
+        </section>
+
+        <section id="employment" class="py-5">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2>Employment History</h2>
                     </div>
-                    <div class="timeline-item">
-                        <strong>SQL Optimization Expert</strong>
-                        <p>Enterprise Data Management</p>
+                </div>
+                <div id="employmentContent"></div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-5">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2>Key Projects</h2>
+                    </div>
+                </div>
+                <div id="projectContent"></div>
+            </div>
+        </section>
+
+        <section id="certifications" class="py-5">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2>Certifications</h2>
+                    </div>
+                </div>
+                <div id="certificationContent"></div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Let's Build Your Project - Contact Now</h2>
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+                                <form id="contactForm" class="row" method="POST">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Your Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="subject" class="form-label">Subject</label>
+                                        <input type="text" class="form-control" id="subject" name="subject" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="message" class="form-label">Message</label>
+                                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-outline-primary btn-lg"><i class="fas fa-paper-plane me-2"></i>Send Message</button>
+                                    </div>
+                                </form>
+                                <div id="formMessage" class="alert mt-3" style="display: none;" role="alert"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <footer style="background: var(--primary); color: white; text-align: center; padding: 40px 5%; margin-top: 40px;">
-        <h3>Let's Build Your System</h3>
-        <p>Available for 40 hours/week commitment.</p>
-        <div style="margin-top: 20px;">
-            <a href="mailto:your-email@example.com" style="color: var(--accent); text-decoration: none;"><i class="fas fa-envelope"></i> Contact CoreLogic</a>
+    <footer class="site-footer text-white py-5">
+        <div class="container">
+            <div class="row gx-4 gy-4 align-items-start">
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <p class="mb-1">Email: <a id="footer-email" href="#" class="footer-link">your-email@example.com</a></p>
+                    <p class="mb-1">Phone: <span id="footer-phone">+92 300 000 0000</span></p>
+                    <p class="mb-0">Based in <span id="footer-location">Karachi, Pakistan</span></p>
+                </div>
+                <div class="col-md-4">
+                    <h5>About this portfolio</h5>
+                    <p class="mb-0 text-light-soft">Senior software developer building finance-grade web apps, APIs, and automation systems. Always focused on clean architecture and strong delivery.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect</h5>
+                    <div class="d-flex flex-wrap gap-2 mt-2 align-items-center">
+                        <a id="footer-facebook" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a id="footer-x" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="fab fa-x"></i></a>
+                        <a id="footer-instagram" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="fab fa-instagram"></i></a>
+                        <span class="footer-divider d-none d-md-inline-block"></span>
+                        <a id="footer-upwork" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="si si-upwork"></i></a>
+                        <a id="footer-linkedin" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="fab fa-linkedin-in"></i></a>
+                        <a id="footer-github" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm footer-btn"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col text-center text-light-soft small">&copy; 2026 Rashid Ahmed Abbasi. All Rights Reserved.</div>
+            </div>
         </div>
-        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 CoreLogic Systems. All Rights Reserved.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="js/data/employment-data.js"></script>
+    <script src="js/data/projects-data.js"></script>
+    <script src="js/data/certifications-data.js"></script>
+    <script src="js/data/contact-data.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
