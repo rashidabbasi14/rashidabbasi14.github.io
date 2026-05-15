@@ -159,7 +159,10 @@ h2 {
 .project-card.has-image .card-img-top {
     width: 100%;
     height: 220px;
-    object-fit: cover;
+    /* Use 'contain' to show the full image without cropping */
+    object-fit: contain; 
+    /* Optional: Adds a background so the empty space looks intentional */
+    background-color: #f0f0f0; 
     display: block;
     border-top-left-radius: 0;
     border-top-right-radius: 0;

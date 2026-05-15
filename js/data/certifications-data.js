@@ -1,23 +1,42 @@
 const certificationsData = [
   {
-    name: "Full-Stack Mastery Certificate",
-    subtitle: "Advanced Web Architecture",
-    description: "Completed a full-stack certification program focused on scalable web applications and modern deployment practices.",
-    image: "https://img.freepik.com/free-photo/document-marketing-strategy-business-concept_53876-132231.jpg?semt=ais_hybrid&w=740&q=80",
-    tags: ["Architecture", "Full Stack"]
+    name: "SQL Advanced Certificate",
+    subtitle: "HackerRank",
+    description: "Demonstrated mastery in complex query optimization, database schema design, and advanced data manipulation. Proven ability to architect high-performance relational database solutions for enterprise environments.",
+    image: "uploads/certifications/sql.png",
+    tags: ["Query Optimization", "Database Architecture", "Performance Tuning"],
+    url: "https://www.hackerrank.com/certificates/0f9eebbc1a99"
   },
   {
-    name: "SQL Optimization Expert",
-    subtitle: "Enterprise data performance",
-    description: "Earned certification in advanced SQL tuning, indexing strategies, and database performance optimization.",
-    image: "https://blog.masterofproject.com/wp-content/uploads/2019/10/project-plan-example-2.jpg",
-    tags: ["SQL", "Performance"]
+    name: "Python Certification",
+    subtitle: "HackerRank",
+    description: "Validated expertise in Pythonic design patterns, algorithmic efficiency, and automated scripting. Skilled in utilizing Python for data-driven backend solutions and robust system integrations.",
+    image: "uploads/certifications/python.png",
+    tags: ["Automation", "Data Logic", "Backend Development"],
+    url: "https://www.hackerrank.com/certificates/ed85e2213f57"
   },
   {
-    name: "Cloud Security Fundamentals",
-    subtitle: "Secure cloud architecture",
-    description: "Completed coursework on cloud governance, identity management, and secure infrastructure design.",
-    image: "https://presentationstemplate.com/wp-content/uploads/2023/09/Software-project-Proposal.jpg",
-    tags: ["Cloud", "Security"]
+    name: "Javascript Intermediate Certification",
+    subtitle: "HackerRank",
+    description: "Verified proficiency in modern JavaScript, including asynchronous programming, DOM manipulation, and functional patterns. Focused on delivering high-performance, interactive user experiences.",
+    image: "uploads/certifications/javascript.png",
+    tags: ["Frontend Engineering", "ES6+", "Asynchronous Programming"],
+    url: "https://www.hackerrank.com/certificates/578b148507eb"
+  },
+  {
+    name: "C# Certification",
+    subtitle: "HackerRank",
+    description: "Certified mastery of C# and .NET fundamentals, focusing on Object-Oriented Programming (OOP) and memory management. Expertise in building secure, scalable, and maintainable enterprise-grade applications.",
+    image: "uploads/certifications/csharp.png",
+    tags: [".NET Core", "OOP Design", "Enterprise Solutions"],
+    url: "https://www.hackerrank.com/certificates/7f8e41a86ed4"
+  },
+  {
+    name: "Software Engineer Certification",
+    subtitle: "HackerRank",
+    description: "Comprehensive validation of end-to-end software development life cycle (SDLC) knowledge. This includes system design, architectural best practices, and the delivery of mission-critical software products.",
+    image: "uploads/certifications/software-engineer.png",
+    tags: ["SDLC", "System Architecture", "Software Engineering"],
+    url: "https://www.hackerrank.com/certificates/ea6495af59ca"
   }
 ];

@@ -143,6 +143,16 @@ function createCard(item) {
         body.appendChild(createTagList(item.tags));
     }
 
+    if (item.url) {
+        const action = document.createElement('a');
+        action.href = item.url;
+        action.target = '_blank';
+        action.rel = 'noopener noreferrer';
+        action.className = 'btn btn-outline-primary mt-3 w-100';
+        action.textContent = item.urlLabel || 'View Certificate';
+        body.appendChild(action);
+    }
+
     card.appendChild(body);
     return card;
 }
