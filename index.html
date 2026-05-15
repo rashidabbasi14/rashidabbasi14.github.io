@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Software Engineer | CoreLogic Systems</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003366; /* Deep Navy */
+            --accent: #00a8cc; /* Tech Blue */
+            --bg: #f8f9fa;
+            --text: #333;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo { font-weight: bold; font-size: 1.4rem; letter-spacing: 1px; }
+
+        /* Hero Section */
+        header {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, #001a33 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        header p { font-size: 1.1rem; color: #a3c2db; max-width: 600px; margin: 0 auto 20px; }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #007ea7; }
+
+        /* Section Container */
+        .container { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
+        h2 { border-left: 5px solid var(--accent); padding-left: 15px; margin-bottom: 30px; color: var(--primary); }
+
+        /* Grid Layouts */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        /* Projects */
+        .project-tags { margin-top: 15px; }
+        .tag {
+            background: #e1e8ed;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            color: var(--primary);
+        }
+
+        /* Timeline (Education/Work) */
+        .timeline-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .timeline-date { font-weight: bold; color: var(--accent); font-size: 0.9rem; }
+
+        /* Mobile Friendly */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            nav { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">CORELOGIC SYSTEMS</div>
+        <div>
+            <a href="#projects" style="color:white; margin-right:20px; text-decoration:none;">Projects</a>
+            <a href="#contact" style="color:white; text-decoration:none;">Contact</a>
+        </div>
+    </nav>
+
+    <header>
+        <img src="your-photo.jpg" alt="Profile Picture" class="profile-img">
+        <h1>Full-Stack Software Engineer</h1>
+        <p>Expert in .NET Core, React, and Banking-Grade Financial Systems. Delivering scalable architecture for mission-critical applications.</p>
+        <div style="margin-top: 25px;">
+            <a href="#contact" class="btn">Hire Me on Upwork</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>About Me</h2>
+        <div class="card">
+            <p>Senior Software Engineer with over 5 years of experience in the fintech and product sectors. Specialized in building high-concurrency systems using .NET Core, Laravel, and React. I focus on logic-driven development and system-to-system integrations.</p>
+        </div>
+    </div>
+
+    <div class="container" id="projects">
+        <h2>Key Projects</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Fintech API Integration</h3>
+                <p>Designed and optimized high-stakes API layers for banking operations using T24 Temenos and IRIS.</p>
+                <div class="project-tags">
+                    <span class="tag">.NET Core</span>
+                    <span class="tag">SQL Server</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Scalable SaaS Dashboard</h3>
+                <p>Built a real-time monitoring system with React and Node.js for managing solar energy efficiency.</p>
+                <div class="project-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            <div>
+                <h2>Education</h2>
+                <div class="card">
+                    <div class="timeline-item">
+                        <div class="timeline-date">Graduated 2021</div>
+                        <strong>BS in Computer Science</strong>
+                        <p>FAST NUCES - Karachi</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2>Certifications</h2>
+                <div class="card">
+                    <div class="timeline-item">
+                        <strong>Full-Stack Mastery Certificate</strong>
+                        <p>Advanced Web Architecture</p>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>SQL Optimization Expert</strong>
+                        <p>Enterprise Data Management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: var(--primary); color: white; text-align: center; padding: 40px 5%; margin-top: 40px;">
+        <h3>Let's Build Your System</h3>
+        <p>Available for 40 hours/week commitment.</p>
+        <div style="margin-top: 20px;">
+            <a href="mailto:your-email@example.com" style="color: var(--accent); text-decoration: none;"><i class="fas fa-envelope"></i> Contact CoreLogic</a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 CoreLogic Systems. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
