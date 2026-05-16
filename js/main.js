@@ -248,27 +248,105 @@ function renderEmployment(data) {
         return;
     }
 
+    // helper: get initials from company/title
+    const getInitials = (text) => {
+        if (!text) return '';
+        return text.split(/\s+/).map(w => w[0] || '').join('').slice(0,2).toUpperCase();
+    };
+
+    const createAvatar = (item, size = 64) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'me-3 flex-shrink-0';
+        wrap.style.width = size + 'px';
+        wrap.style.height = size + 'px';
+
+        if (item && item.image) {
+            const img = document.createElement('img');
+            img.src = item.image;
+            img.alt = item.company || item.title || 'Avatar';
+            img.className = 'rounded-circle';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            wrap.appendChild(img);
+        } else {
+            const initials = getInitials(item && item.company ? item.company : (item && item.title ? item.title : '?'));
+            wrap.style.display = 'flex';
+            wrap.style.alignItems = 'center';
+            wrap.style.justifyContent = 'center';
+            wrap.style.borderRadius = '50%';
+            wrap.style.backgroundColor = '#0d6efd';
+            wrap.style.color = '#fff';
+            wrap.style.fontWeight = '600';
+            wrap.style.fontSize = Math.max(14, Math.floor(size / 3)) + 'px';
+            wrap.textContent = initials || '?';
+        }
+        return wrap;
+    };
+
     const [current, ...previous] = data;
+    
+    // Manage header toggle button placement (idempotent)
+    const headerCol = container.parentElement.querySelector('.row.mb-4 .col');
+    let headerBtn = document.getElementById('employmentToggleBtn');
+    if (previous.length) {
+        if (headerCol) headerCol.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+        if (!headerBtn) {
+            headerBtn = document.createElement('button');
+            headerBtn.id = 'employmentToggleBtn';
+            headerBtn.className = 'btn btn-outline-primary';
+            headerBtn.type = 'button';
+            headerBtn.setAttribute('data-bs-toggle', 'collapse');
+            headerBtn.setAttribute('data-bs-target', '#employmentCollapse');
+            headerBtn.setAttribute('aria-expanded', 'false');
+            headerBtn.setAttribute('aria-controls', 'employmentCollapse');
+            headerBtn.textContent = 'View previous roles';
+            if (headerCol) headerCol.appendChild(headerBtn);
+        } else {
+            headerBtn.style.display = '';
+            headerBtn.setAttribute('data-bs-target', '#employmentCollapse');
+            headerBtn.setAttribute('aria-controls', 'employmentCollapse');
+        }
+    } else {
+        if (headerBtn) headerBtn.remove();
+        if (headerCol) headerCol.classList.remove('d-flex', 'justify-content-between', 'align-items-center');
+    }
     const currentCard = document.createElement('div');
     currentCard.className = 'card shadow-sm mb-3';
-    currentCard.innerHTML = `
-        <div class="card-body">
-            <div class="row g-3 align-items-center">
-                <div class="col-md-9">
-                    <h3 class="h5 mb-1">${current.title || 'Current Role'}</h3>
-                    <p class="mb-0 text-light-soft">${current.company || ''} ${current.duration ? '| ' + current.duration : ''}</p>
-                </div>
-                ${previous.length ? `
-                <div class="col-md-3 text-md-end">
-                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#employmentCollapse" aria-expanded="false" aria-controls="employmentCollapse">
-                        View previous roles
-                    </button>
-                </div>
-                ` : ''}
-            </div>
-            ${current.description ? `<p class="mt-3 mb-0">${current.description}</p>` : ''}
-        </div>
-    `;
+    const cb = document.createElement('div');
+    cb.className = 'card-body';
+
+    const row = document.createElement('div');
+    row.className = 'row g-3 align-items-center';
+
+    const colImg = document.createElement('div');
+    colImg.className = 'col-auto';
+    colImg.appendChild(createAvatar(current, 72));
+
+    const colMain = document.createElement('div');
+    colMain.className = 'col-md-9';
+    const h3 = document.createElement('h3');
+    h3.className = 'h5 mb-1';
+    h3.textContent = current.title || 'Current Role';
+    const pinfo = document.createElement('p');
+    pinfo.className = 'mb-0 text-light-soft';
+    pinfo.textContent = `${current.company || ''} ${current.duration ? '| ' + current.duration : ''}`;
+    colMain.appendChild(h3);
+    colMain.appendChild(pinfo);
+
+    row.appendChild(colImg);
+    row.appendChild(colMain);
+
+    // header-level toggle button is managed separately
+
+    cb.appendChild(row);
+    if (current.description) {
+        const desc = document.createElement('p');
+        desc.className = 'mt-3 mb-0';
+        desc.textContent = current.description;
+        cb.appendChild(desc);
+    }
+    currentCard.appendChild(cb);
     container.appendChild(currentCard);
 
     if (previous.length) {
@@ -278,20 +356,58 @@ function renderEmployment(data) {
         previous.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card shadow-sm mb-3';
-            card.innerHTML = `
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4 class="h6 mb-1">${item.title || 'Role'}</h4>
-                            <p class="mb-0 text-light-soft">${item.company || ''} ${item.duration ? '| ' + item.duration : ''}</p>
-                            ${item.description ? `<p class="mt-2 mb-0">${item.description}</p>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
+            const body = document.createElement('div');
+            body.className = 'card-body';
+            const r = document.createElement('div');
+            r.className = 'row g-3 align-items-center';
+
+            const colA = document.createElement('div');
+            colA.className = 'col-auto';
+            colA.appendChild(createAvatar(item, 56));
+
+            const colB = document.createElement('div');
+            colB.className = 'col-12 col-md';
+            const h4 = document.createElement('h4');
+            h4.className = 'h6 mb-1';
+            h4.textContent = item.title || 'Role';
+            const p = document.createElement('p');
+            p.className = 'mb-0 text-light-soft';
+            p.textContent = `${item.company || ''} ${item.duration ? '| ' + item.duration : ''}`;
+            colB.appendChild(h4);
+            colB.appendChild(p);
+
+            r.appendChild(colA);
+            r.appendChild(colB);
+
+            if (item.description) {
+                const descCol = document.createElement('div');
+                descCol.className = 'col-12';
+                const desc = document.createElement('p');
+                desc.className = 'mt-2 mb-0';
+                desc.textContent = item.description;
+                descCol.appendChild(desc);
+                r.appendChild(descCol);
+            }
+
+            body.appendChild(r);
+            card.appendChild(body);
             collapseWrapper.appendChild(card);
         });
         container.appendChild(collapseWrapper);
+
+        // Wire up collapse events to toggle header button text
+        const collapseEl = document.getElementById('employmentCollapse');
+        const toggleBtn = document.getElementById('employmentToggleBtn');
+        if (collapseEl && toggleBtn) {
+            collapseEl.addEventListener('shown.bs.collapse', () => {
+                toggleBtn.textContent = 'Hide previous roles';
+                toggleBtn.setAttribute('aria-expanded', 'true');
+            });
+            collapseEl.addEventListener('hidden.bs.collapse', () => {
+                toggleBtn.textContent = 'View previous roles';
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
     }
 }
 
