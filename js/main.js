@@ -5,7 +5,7 @@ function init() {
     }
 
     renderEmployment(typeof employmentData !== 'undefined' ? employmentData : []);
-    renderCarousel('projectContent', typeof projectsData !== 'undefined' ? projectsData : [], 'No project entries found.', 'projectCarousel');
+    renderProjectsCarousel('projectContent', typeof allProjects !== 'undefined' ? allProjects : [], 'No project entries found.', 'projectCarousel');
     renderCarousel('certificationContent', typeof certificationsData !== 'undefined' ? certificationsData : [], 'No certification entries found.', 'certCarousel');
 }
 
@@ -56,6 +56,11 @@ function setupContactForm(email) {
 
 function populateFromMyData(data) {
     try {
+        // Page title
+        if (data.name && data.title) {
+            document.title = `${data.name} | ${data.title}`;
+        }
+
         // Navbar brand
         const navbarBrand = document.getElementById('navbar-brand');
         if (navbarBrand && data.name) navbarBrand.textContent = data.name;
@@ -231,6 +236,177 @@ function renderCards(containerId, data, emptyMessage) {
         row.appendChild(col);
     });
     container.appendChild(row);
+}
+
+function renderProjects(containerId, data, emptyMessage) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = `<div class="alert alert-secondary text-center">${emptyMessage}</div>`;
+        return;
+    }
+
+    const row = document.createElement('div');
+    row.className = 'row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4';
+    
+    data.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        
+        const card = document.createElement('div');
+        card.className = 'card project-card shadow-sm h-100';
+        
+        if (item.image) {
+            const image = document.createElement('img');
+            image.src = item.image;
+            image.alt = item.title || item.name || 'Card image';
+            image.className = 'card-img-top';
+            card.appendChild(image);
+        }
+        
+        const body = document.createElement('div');
+        body.className = 'card-body d-flex flex-column';
+        
+        const title = document.createElement('h3');
+        title.className = 'h5';
+        title.textContent = item.title || item.name || 'Untitled';
+        body.appendChild(title);
+        
+        if (item.subtitle) {
+            const subtitle = document.createElement('p');
+            subtitle.className = 'mb-2 text-light-soft';
+            subtitle.textContent = item.subtitle;
+            body.appendChild(subtitle);
+        }
+        
+        if (item.description) {
+            const description = document.createElement('p');
+            description.className = 'flex-grow-1';
+            description.textContent = item.description;
+            body.appendChild(description);
+        }
+        
+        if (Array.isArray(item.tags) && item.tags.length) {
+            body.appendChild(createTagList(item.tags));
+        }
+        
+        const link = document.createElement('a');
+        link.href = `project.html?id=${item.id}`;
+        link.className = 'btn btn-outline-primary mt-3 w-100';
+        link.innerHTML = '<i class="fas fa-arrow-right me-2"></i>View Project';
+        body.appendChild(link);
+        
+        card.appendChild(body);
+        col.appendChild(card);
+        row.appendChild(col);
+    });
+    
+    container.appendChild(row);
+}
+
+function renderProjectsCarousel(containerId, data, emptyMessage, carouselId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = `<div class="alert alert-secondary text-center">${emptyMessage}</div>`;
+        return;
+    }
+
+    const slides = chunkArray(data, 3);
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel slide project-carousel';
+    carousel.id = carouselId;
+    carousel.setAttribute('data-bs-ride', 'carousel');
+    carousel.setAttribute('data-bs-interval', '12000');
+    carousel.setAttribute('data-bs-pause', 'false');
+
+    const inner = document.createElement('div');
+    inner.className = 'carousel-inner';
+    slides.forEach((slideItems, index) => {
+        const item = document.createElement('div');
+        item.className = `carousel-item${index === 0 ? ' active' : ''}`;
+        const row = document.createElement('div');
+        row.className = 'row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4';
+
+        slideItems.forEach(entry => {
+            const col = document.createElement('div');
+            col.className = 'col';
+            col.appendChild(createProjectCard(entry));
+            row.appendChild(col);
+        });
+
+        item.appendChild(row);
+        inner.appendChild(item);
+    });
+    carousel.appendChild(inner);
+
+    if (slides.length > 1) {
+        const indicators = document.createElement('div');
+        indicators.className = 'carousel-indicators mt-4';
+        slides.forEach((_, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.setAttribute('data-bs-target', `#${carouselId}`);
+            button.setAttribute('data-bs-slide-to', index);
+            button.setAttribute('aria-label', `Slide ${index + 1}`);
+            if (index === 0) {
+                button.className = 'active';
+                button.setAttribute('aria-current', 'true');
+            }
+            indicators.appendChild(button);
+        });
+        carousel.appendChild(indicators);
+    }
+
+    container.appendChild(carousel);
+}
+
+function createProjectCard(item) {
+    const card = document.createElement('div');
+    card.className = 'card project-card shadow-sm h-100';
+    
+    if (item.image) {
+        const image = document.createElement('img');
+        image.src = item.image;
+        image.alt = item.title || item.name || 'Card image';
+        image.className = 'card-img-top';
+        card.appendChild(image);
+    }
+    
+    const body = document.createElement('div');
+    body.className = 'card-body d-flex flex-column';
+    
+    const title = document.createElement('h3');
+    title.className = 'h5';
+    title.textContent = item.title || item.name || 'Untitled';
+    body.appendChild(title);
+    
+    if (item.subtitle) {
+        const subtitle = document.createElement('p');
+        subtitle.className = 'mb-2 text-light-soft';
+        subtitle.textContent = item.subtitle;
+        body.appendChild(subtitle);
+    }
+    
+    if (item.description) {
+        const description = document.createElement('p');
+        description.className = 'flex-grow-1';
+        description.textContent = item.description;
+        body.appendChild(description);
+    }
+    
+    if (Array.isArray(item.tags) && item.tags.length) {
+        body.appendChild(createTagList(item.tags));
+    }
+    
+    const link = document.createElement('a');
+    link.href = `project.html?id=${item.id}`;
+    link.className = 'btn btn-outline-primary mt-3 w-100';
+    link.innerHTML = '<i class="fas fa-arrow-right me-2"></i>View Project';
+    body.appendChild(link);
+    
+    card.appendChild(body);
+    return card;
 }
 
 function renderCarousel(containerId, data, emptyMessage, carouselId) {

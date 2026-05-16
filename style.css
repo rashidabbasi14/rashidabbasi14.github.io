@@ -159,10 +159,8 @@ h2 {
 .project-card.has-image .card-img-top {
     width: 100%;
     height: 220px;
-    /* Use 'contain' to show the full image without cropping */
-    object-fit: contain; 
-    /* Optional: Adds a background so the empty space looks intentional */
-    background-color: #f0f0f0; 
+    object-fit: contain;
+    background-color: #f0f0f0;
     display: block;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -287,4 +285,76 @@ footer a {
     width: 1px;
     height: 2.25rem;
     background: rgba(255, 255, 255, 0.25);
+}
+
+/* Project Detail Page Styles */
+.breadcrumb {
+    margin-bottom: 0.5rem;
+}
+
+.breadcrumb-item a {
+    color: rgba(248, 251, 255, 0.8);
+}
+
+.breadcrumb-item.active {
+    color: var(--white);
+}
+
+.main-image {
+    max-height: 500px;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-img {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.thumbnail-img.active {
+    border-color: var(--accent);
+}
+
+.thumbnail-img:hover {
+    opacity: 0.8;
+}
+
+.project-description {
+    line-height: 1.8;
+}
+
+.project-description ul {
+    padding-left: 1.5rem;
+}
+
+.project-description li {
+    margin-bottom: 0.5rem;
+}
+
+/* Project Card Styles */
+.project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-projects {
+    min-width: 120px;
 }
