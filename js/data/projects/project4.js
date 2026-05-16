@@ -1,4 +1,4 @@
-const project3 = {
+const project4 = {
   id: 3,
   title: "AI Insights Pipeline",
   subtitle: "Predictive transaction analytics",

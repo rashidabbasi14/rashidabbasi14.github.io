@@ -1,5 +1,5 @@
 const myData = {
-  name: "Rashid Ahmed Abbasi",
+  name: "Rashid Ahmed Abbasii",
   title: "Senior Software Engineer",
   tagline: "Full-Stack Software Engineer",
   description: "Expert in .NET Core, React, and Banking-Grade Financial Systems. Delivering scalable architecture for mission-critical applications.",

@@ -1,12 +1,52 @@
-function init() {
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve(script);
+        script.onerror = () => reject(new Error(`Script load error for ${src}`));
+        document.body.appendChild(script);
+    });
+}
+
+async function init() {
+    // Always load myData, navbar, and footer first
+    await loadScript('js/data/my-data.js');
+    await loadScript('js/common/navbar.js');
+    await loadScript('js/common/footer.js');
+
     // Populate all data from myData
     if (typeof myData !== 'undefined') {
         populateFromMyData(myData);
     }
 
-    renderEmployment(typeof employmentData !== 'undefined' ? employmentData : []);
-    renderProjectsCarousel('projectContent', typeof allProjects !== 'undefined' ? allProjects : [], 'No project entries found.', 'projectCarousel');
-    renderCarousel('certificationContent', typeof certificationsData !== 'undefined' ? certificationsData : [], 'No certification entries found.', 'certCarousel');
+    const path = window.location.pathname.split('/').pop();
+
+    if (path === 'index.html' || path === '') {
+        await loadScript('js/data/employment-data.js');
+        await loadScript('js/data/certifications-data.js');
+        await loadScript('js/data/projects/index.js'); 
+        
+        renderEmployment(typeof employmentData !== 'undefined' ? employmentData : []);
+        renderProjectsCarousel('projectContent', typeof allProjects !== 'undefined' ? allProjects : [], 'No project entries found.', 'projectCarousel');
+        renderCarousel('certificationContent', typeof certificationsData !== 'undefined' ? certificationsData : [], 'No certification entries found.', 'certCarousel');
+
+    } else if (path === 'projects.html') {
+        await loadScript('js/data/projects/index.js'); 
+        await loadScript('js/projects.js'); 
+        if (typeof renderProjects === 'function') {
+            renderProjects();
+        }
+    } else if (path === 'project.html') {
+        await loadScript('js/data/projects/index.js');
+        await loadScript('js/data/projects/project1.js');
+        await loadScript('js/data/projects/project2.js');
+        await loadScript('js/data/projects/project3.js');
+        await loadScript('js/data/projects/project4.js');
+        await loadScript('js/project.js'); 
+        if (typeof renderProject === 'function') {
+            renderProject();
+        }
+    }
 }
 
 function setupContactForm(email) {
@@ -18,14 +58,12 @@ function setupContactForm(email) {
         form.method = 'POST';
         form.setAttribute('data-email', email);
 
-        // Add hidden field for redirect
         const redirectInput = document.createElement('input');
         redirectInput.type = 'hidden';
         redirectInput.name = '_next';
         redirectInput.value = window.location.href;
         form.appendChild(redirectInput);
 
-        // Add honeypot for spam protection
         const honeypot = document.createElement('input');
         honeypot.type = 'hidden';
         honeypot.name = '_honey';
@@ -44,9 +82,7 @@ function setupContactForm(email) {
             messageDiv.textContent = 'Sending your message...';
             messageDiv.style.display = 'block';
 
-            // Form will submit normally after a brief delay
             setTimeout(() => {
-                // This allows the user to see the sending message
             }, 100);
         });
     } catch (e) {
@@ -56,16 +92,13 @@ function setupContactForm(email) {
 
 function populateFromMyData(data) {
     try {
-        // Page title
         if (data.name && data.title) {
             document.title = `${data.name} | ${data.title}`;
         }
 
-        // Navbar brand
         const navbarBrand = document.getElementById('navbar-brand');
         if (navbarBrand && data.name) navbarBrand.textContent = data.name;
 
-        // Header section
         const headerImage = document.getElementById('header-image');
         if (headerImage && data.image) headerImage.src = data.image;
 
@@ -75,11 +108,9 @@ function populateFromMyData(data) {
         const headerDescription = document.getElementById('header-description');
         if (headerDescription && data.description) headerDescription.textContent = data.description;
 
-        // About Me section
         const aboutContent = document.getElementById('about-content');
         if (aboutContent && data.aboutMe) aboutContent.textContent = data.aboutMe;
 
-        // Education section
         const educationContent = document.getElementById('education-content');
         if (educationContent && Array.isArray(data.education)) {
             educationContent.innerHTML = '';
@@ -105,11 +136,9 @@ function populateFromMyData(data) {
             });
         }
 
-        // Footer About Me section
         const footerAbout = document.getElementById('footer-about');
         if (footerAbout && data.footerAboutMe) footerAbout.textContent = data.footerAboutMe;
 
-        // Header hero links
         const setIf = (id, url) => {
             const el = document.getElementById(id);
             if (el && url) el.href = url;
@@ -123,7 +152,6 @@ function populateFromMyData(data) {
             setIf('hero-linkedin', data.social.linkedin);
             setIf('hero-github', data.social.github);
 
-            // footer links
             setIf('footer-facebook', data.social.facebook);
             setIf('footer-x', data.social.x);
             setIf('footer-instagram', data.social.instagram);
@@ -132,7 +160,6 @@ function populateFromMyData(data) {
             setIf('footer-github', data.social.github);
         }
 
-        // Contact info
         const emailEl = document.getElementById('footer-email');
         if (emailEl && data.email) { emailEl.textContent = data.email; emailEl.href = `mailto:${data.email}`; }
 
@@ -142,7 +169,6 @@ function populateFromMyData(data) {
         const locEl = document.getElementById('footer-location');
         if (locEl && data.location) locEl.textContent = data.location;
 
-        // setup contact form
         setupContactForm(data.email);
     } catch (e) {
         console.warn('populateFromMyData error', e);
@@ -474,7 +500,6 @@ function renderEmployment(data) {
         return;
     }
 
-    // helper: get initials from company/title
     const getInitials = (text) => {
         if (!text) return '';
         return text.split(/\s+/).map(w => w[0] || '').join('').slice(0,2).toUpperCase();
@@ -512,7 +537,6 @@ function renderEmployment(data) {
 
     const [current, ...previous] = data;
     
-    // Manage header toggle button placement (idempotent)
     const headerCol = container.parentElement.querySelector('.row.mb-4 .col');
     let headerBtn = document.getElementById('employmentToggleBtn');
     if (previous.length) {
@@ -531,7 +555,7 @@ function renderEmployment(data) {
         } else {
             headerBtn.style.display = '';
             headerBtn.setAttribute('data-bs-target', '#employmentCollapse');
-            headerBtn.setAttribute('aria-controls', 'employmentCollapse');
+            headerBtn.setAttribute('aria-controls', '#employmentCollapse');
         }
     } else {
         if (headerBtn) headerBtn.remove();
@@ -562,8 +586,6 @@ function renderEmployment(data) {
 
     row.appendChild(colImg);
     row.appendChild(colMain);
-
-    // header-level toggle button is managed separately
 
     cb.appendChild(row);
     if (current.description) {
@@ -621,7 +643,6 @@ function renderEmployment(data) {
         });
         container.appendChild(collapseWrapper);
 
-        // Wire up collapse events to toggle header button text
         const collapseEl = document.getElementById('employmentCollapse');
         const toggleBtn = document.getElementById('employmentToggleBtn');
         if (collapseEl && toggleBtn) {
