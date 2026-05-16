@@ -1,4 +1,4 @@
-const project1 = {
+window.project1 = {
   id: 1,
   title: "Fintech API Integration",
   subtitle: "Banking systems automation",

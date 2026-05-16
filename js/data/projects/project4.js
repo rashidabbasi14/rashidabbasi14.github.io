@@ -1,5 +1,5 @@
-const project4 = {
-  id: 3,
+window.project4 = {
+  id: 4,
   title: "AI Insights Pipeline",
   subtitle: "Predictive transaction analytics",
   description: "Built a data pipeline and dashboard to surface predictive insights from large-scale transaction datasets. Leveraged machine learning algorithms to identify patterns and anomalies.",

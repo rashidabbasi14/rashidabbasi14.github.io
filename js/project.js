@@ -6,13 +6,8 @@ function getProjectId() {
 
 // Get project data by ID
 function getProjectData(id) {
-    const projects = {
-        1: typeof project1 !== 'undefined' ? project1 : null,
-        2: typeof project2 !== 'undefined' ? project2 : null,
-        3: typeof project3 !== 'undefined' ? project3 : null,
-        4: typeof project4 !== 'undefined' ? project4 : null
-    };
-    return projects[id] || null;
+    const projectName = `project${id}`;
+    return window[projectName] || null;
 }
 
 // Render project details

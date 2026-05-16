@@ -1,5 +1,5 @@
 // Render projects on the projects page
-function renderProjects() {
+function renderProjects(allProjects) {
     const container = document.getElementById("projectsContainer");
     if (typeof allProjects !== "undefined" && allProjects.length > 0) {
         allProjects.forEach(project => {
@@ -10,7 +10,7 @@ function renderProjects() {
             card.className = "card project-card shadow-sm h-100";
             
             const image = document.createElement("img");
-            image.src = project.image;
+            image.src = project.coverImage;
             image.alt = project.title;
             image.className = "card-img-top";
             
@@ -31,7 +31,7 @@ function renderProjects() {
             
             const tags = document.createElement("div");
             tags.className = "project-tags";
-            project.tags.forEach(tag => {
+            project.technologies.forEach(tag => {
                 const badge = document.createElement("span");
                 badge.className = "badge bg-light text-primary me-2 mb-2";
                 badge.textContent = tag;
@@ -57,4 +57,5 @@ function renderProjects() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", renderProjects);
+// No need to call renderProjects on DOMContentLoaded here, as it's now called from main.js
+// document.addEventListener("DOMContentLoaded", renderProjects);

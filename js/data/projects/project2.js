@@ -1,4 +1,4 @@
-const project2 = {
+window.project2 = {
   id: 2,
   title: "SaaS Dashboard Platform",
   subtitle: "Real-time analytics dashboard",
@@ -17,8 +17,8 @@ const project2 = {
   coverImage: "https://blog.masterofproject.com/wp-content/uploads/2019/10/project-plan-example-2.jpg",
   images: [
     "https://blog.masterofproject.com/wp-content/uploads/2019/10/project-plan-example-2.jpg",
-    "https://img.freepik.com/free-vector/dashboard-user-interface_23-2148764442.jpg",
-    "https://img.freepik.com/free-vector/analytics-concept-illustration_114360-2100.jpg"
+    "https://img.freepik.com/free-vector/api-interface-concept-illustration_114360-2100.jpg",
+    "https://img.freepik.com/free-vector/banking-finance-background_23-2148764442.jpg"
   ],
   technologies: ["React", "Node.js", "Azure", "Redux", "Chart.js", "Socket.io"],
   projectLink: "https://github.com/example/saas-dashboard",
