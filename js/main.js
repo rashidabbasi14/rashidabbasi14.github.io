@@ -1,7 +1,7 @@
 function init() {
-    // Populate contact links first (contact-data.js defines `contactData`)
-    if (typeof contactData !== 'undefined') {
-        populateContact(contactData);
+    // Populate all data from myData
+    if (typeof myData !== 'undefined') {
+        populateFromMyData(myData);
     }
 
     renderEmployment(typeof employmentData !== 'undefined' ? employmentData : []);
@@ -54,30 +54,80 @@ function setupContactForm(email) {
     }
 }
 
-function populateContact(data) {
+function populateFromMyData(data) {
     try {
-        // header hero links
+        // Navbar brand
+        const navbarBrand = document.getElementById('navbar-brand');
+        if (navbarBrand && data.name) navbarBrand.textContent = data.name;
+
+        // Header section
+        const headerImage = document.getElementById('header-image');
+        if (headerImage && data.image) headerImage.src = data.image;
+
+        const headerTagline = document.getElementById('header-tagline');
+        if (headerTagline && data.tagline) headerTagline.textContent = data.tagline;
+
+        const headerDescription = document.getElementById('header-description');
+        if (headerDescription && data.description) headerDescription.textContent = data.description;
+
+        // About Me section
+        const aboutContent = document.getElementById('about-content');
+        if (aboutContent && data.aboutMe) aboutContent.textContent = data.aboutMe;
+
+        // Education section
+        const educationContent = document.getElementById('education-content');
+        if (educationContent && Array.isArray(data.education)) {
+            educationContent.innerHTML = '';
+            data.education.forEach((edu, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item' + (index > 0 ? ' mt-3 pt-3 border-top' : '');
+                
+                const yearDiv = document.createElement('div');
+                yearDiv.className = 'timeline-date';
+                yearDiv.textContent = `Graduated ${edu.year}`;
+                
+                const degreeStrong = document.createElement('strong');
+                degreeStrong.textContent = edu.degree;
+                
+                const instPara = document.createElement('p');
+                instPara.className = 'mb-0';
+                instPara.textContent = edu.institution;
+                
+                item.appendChild(yearDiv);
+                item.appendChild(degreeStrong);
+                item.appendChild(instPara);
+                educationContent.appendChild(item);
+            });
+        }
+
+        // Footer About Me section
+        const footerAbout = document.getElementById('footer-about');
+        if (footerAbout && data.footerAboutMe) footerAbout.textContent = data.footerAboutMe;
+
+        // Header hero links
         const setIf = (id, url) => {
             const el = document.getElementById(id);
             if (el && url) el.href = url;
         };
 
-        setIf('hero-facebook', data.social.facebook);
-        setIf('hero-x', data.social.x);
-        setIf('hero-instagram', data.social.instagram);
-        setIf('hero-upwork', data.social.upwork);
-        setIf('hero-linkedin', data.social.linkedin);
-        setIf('hero-github', data.social.github);
+        if (data.social) {
+            setIf('hero-facebook', data.social.facebook);
+            setIf('hero-x', data.social.x);
+            setIf('hero-instagram', data.social.instagram);
+            setIf('hero-upwork', data.social.upwork);
+            setIf('hero-linkedin', data.social.linkedin);
+            setIf('hero-github', data.social.github);
 
-        // footer links
-        setIf('footer-facebook', data.social.facebook);
-        setIf('footer-x', data.social.x);
-        setIf('footer-instagram', data.social.instagram);
-        setIf('footer-upwork', data.social.upwork);
-        setIf('footer-linkedin', data.social.linkedin);
-        setIf('footer-github', data.social.github);
+            // footer links
+            setIf('footer-facebook', data.social.facebook);
+            setIf('footer-x', data.social.x);
+            setIf('footer-instagram', data.social.instagram);
+            setIf('footer-upwork', data.social.upwork);
+            setIf('footer-linkedin', data.social.linkedin);
+            setIf('footer-github', data.social.github);
+        }
 
-        // contact info
+        // Contact info
         const emailEl = document.getElementById('footer-email');
         if (emailEl && data.email) { emailEl.textContent = data.email; emailEl.href = `mailto:${data.email}`; }
 
@@ -90,7 +140,7 @@ function populateContact(data) {
         // setup contact form
         setupContactForm(data.email);
     } catch (e) {
-        console.warn('populateContact error', e);
+        console.warn('populateFromMyData error', e);
     }
 }
 
