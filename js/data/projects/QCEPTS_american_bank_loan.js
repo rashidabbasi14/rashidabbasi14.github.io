@@ -13,11 +13,12 @@ window.QCEPTS_american_bank_loan = {
       <li><strong>Flexible Interest & Repayment Schedulers:</strong> A modular mathematics package that handles fixed and variable interest amortizations, compounding schedules, and prepayment adjustments cleanly.</li>
     </ul>
   `,
-  coverImage: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80",
+  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/QCEPTS-american-bank-loan/refs/heads/master/readme/project-pictures/main.png",
   images: [
-    "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1200&q=80"
+    "https://raw.githubusercontent.com/rashidabbasi14/QCEPTS-american-bank-loan/refs/heads/master/readme/project-pictures/main.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/QCEPTS-american-bank-loan/refs/heads/master/readme/project-pictures/borrow-calculator.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/QCEPTS-american-bank-loan/refs/heads/master/readme/project-pictures/Navbar.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/QCEPTS-american-bank-loan/refs/heads/master/readme/project-pictures/contact-us.png",
   ],
   technologies: ["Node.js", "Express.js", "MongoDB", "Mongoose", "JWT", "Amortization Algorithms"],
   projectLink: "https://github.com/rashidabbasi14/QCEPTS-american-bank-loan",
