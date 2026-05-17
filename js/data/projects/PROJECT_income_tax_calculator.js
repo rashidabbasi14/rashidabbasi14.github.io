@@ -12,10 +12,10 @@ window.PROJECT_income_tax_calculator = {
       <li><strong>Responsive UI Layer:</strong> Designed for cross-device utility, featuring quick data field adjustments and instant computation reactions with zero server lag.</li>
     </ul>
   `,
-  coverImage: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
+  coverImage: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1200&q=80",
   images: [
-    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1200&q=80"
+    "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80"
   ],
   technologies: ["JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Tax Bracket Mathematics"],
   projectLink: "https://github.com/rashidabbasi14/PROJECT-income-tax-calculator",
