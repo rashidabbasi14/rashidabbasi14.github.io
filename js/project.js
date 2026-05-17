@@ -135,12 +135,10 @@ async function loadAndRenderReadme(projectLink) {
             if (typeof marked !== 'undefined') {
                 readmeContainer.insertAdjacentHTML('beforeend', marked.parse(markdownText));
             } else {
-                // Fallback: display raw markdown with basic formatting
-                console.warn("marked.js library not loaded, displaying raw markdown");
-                readmeContainer.innerHTML = `
-                    <h2 class="h4 mb-3">Project README</h2>
-                    <div class="alert alert-warning">
-                        <p>Unable to load the README viewer. Please <a href="${projectLink}" target="_blank">view the project on GitHub</a>.</p>
+                readmeContainer.innerHTML = `                
+                    <div class="card-body">
+                        <h2 class="h4 mb-3">Project Overview</h2>
+                        <div class="project-description">${project.longDescription || project.description}</div>
                     </div>
                 `;
             }

@@ -10,9 +10,9 @@ function loadScript(src) {
 
 async function init() {
     // Always load myData, navbar, and footer first
-    await loadScript("js/data/my-data.js");
-    await loadScript("js/common/navbar.js");
+    await loadScript("js/common/header.js");
     await loadScript("js/common/footer.js");
+    await loadScript("js/data/my-data.js");
 
     // Populate all data from myData
     if (typeof myData !== "undefined") {
