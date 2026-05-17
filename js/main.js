@@ -187,8 +187,17 @@ function createTagList(tags = []) {
 }
 
 function createCard(item) {
-    const card = document.createElement("div");
-    card.className = "card project-card shadow-sm h-100";
+    // If a URL exists, make the root element an anchor tag; otherwise, keep it a div
+    const card = document.createElement(item.url ? "a" : "div");
+    card.className = "card project-card shadow-sm h-100 text-decoration-none text-reset"; 
+    
+    // Configure link attributes if it's an anchor tag
+    if (item.url) {
+        card.href = item.url;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+    }
+
     const body = document.createElement("div");
     body.className = "card-body";
 
@@ -221,16 +230,6 @@ function createCard(item) {
 
     if (Array.isArray(item.tags) && item.tags.length) {
         body.appendChild(createTagList(item.tags));
-    }
-
-    if (item.url) {
-        const action = document.createElement("a");
-        action.href = item.url;
-        action.target = "_blank";
-        action.rel = "noopener noreferrer";
-        action.className = "btn btn-outline-primary mt-3 w-100";
-        action.textContent = item.urlLabel || "View Certificate";
-        body.appendChild(action);
     }
 
     card.appendChild(body);
