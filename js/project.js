@@ -2,12 +2,12 @@ let project = null;
 // Get project ID from URL
 function getProjectId() {
     const urlParams = new URLSearchParams(window.location.search);
-    return parseInt(urlParams.get('id')) || 1;
+    return urlParams.get('id') || '1';
 }
 
 // Get project data by ID
 function getProjectData(id) {
-    const projectName = `project${id}`;
+    const projectName = `${id}`;
     return window[projectName] || null;
 }
 
@@ -123,13 +123,21 @@ async function loadAndRenderReadme(projectLink) {
         const username = match[1];
         const repoName = match[2];
         const readmeUrl = `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`;
+        const readmeUrl2 = `https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`;
 
         try {
             const response = await fetch(readmeUrl);
+            var markdownText = '';
+
             if (!response.ok) {
-                throw new Error(`Failed to fetch README.md: ${response.statusText}`);
+                const response2 = await fetch(readmeUrl2);
+                if (!response2.ok) {
+                    throw new Error(`Failed to fetch README.md: ${response.statusText}`);
+                }
+                markdownText = await response2.text();
+            } else {
+                markdownText = await response.text();
             }
-            const markdownText = await response.text();
             
             // Check if marked library is available
             if (typeof marked !== 'undefined') {
