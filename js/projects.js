@@ -72,7 +72,6 @@ function renderProjects(projectsToRender) {
 }
 
 // Filter projects based on search query and active filters
-// Filter projects based on search query and active filters
 function filterProjects() {
     const searchInput = document.getElementById("projectSearch");
     const searchQuery = searchInput ? searchInput.value.toLowerCase() : "";

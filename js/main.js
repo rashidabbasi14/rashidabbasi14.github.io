@@ -263,80 +263,16 @@ function renderCards(containerId, data, emptyMessage) {
     container.appendChild(row);
 }
 
-function renderProjects(containerId, data, emptyMessage) {
+function renderProjectsCarousel(containerId, data, emptyMessage, carouselId) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
     if (!Array.isArray(data) || data.length === 0) {
         container.innerHTML = `<div class="alert alert-secondary text-center">${emptyMessage}</div>`;
         return;
     }
+    const sortedData = [...data].sort((a, b) => (b.priority === true) - (a.priority === true));
 
-    const row = document.createElement("div");
-    row.className = "row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4";
-    
-    data.forEach(item => {
-        const col = document.createElement("div");
-        col.className = "col";
-        
-        // Changed from a 'div' to an 'a' tag to make the whole card clickable
-        const card = document.createElement("a");
-        card.href = `project.html?id=${item.id}`;
-        // Added Bootstrap utilities to remove default link styling
-        card.className = "card project-card shadow-sm h-100 text-decoration-none text-reset";
-        
-        if (item.image) {
-            const image = document.createElement("img");
-            image.src = item.image;
-            image.alt = item.title || item.name || "Card image";
-            image.className = "card-img-top";
-            card.appendChild(image);
-        }
-        
-        const body = document.createElement("div");
-        body.className = "card-body d-flex flex-column";
-        
-        const title = document.createElement("h3");
-        title.className = "h5";
-        title.textContent = item.title || item.name || "Untitled";
-        body.appendChild(title);
-        
-        if (item.subtitle) {
-            const subtitle = document.createElement("p");
-            subtitle.className = "mb-2 text-light-soft";
-            subtitle.textContent = item.subtitle;
-            body.appendChild(subtitle);
-        }
-        
-        if (item.description) {
-            const description = document.createElement("p");
-            description.className = "flex-grow-1";
-            description.textContent = item.description;
-            body.appendChild(description);
-        }
-        
-        if (Array.isArray(item.tags) && item.tags.length) {
-            body.appendChild(createTagList(item.tags));
-        }
-        
-        // The individual link button has been completely removed from here
-        
-        card.appendChild(body);
-        col.appendChild(card);
-        row.appendChild(col);
-    });
-    
-    container.appendChild(row);
-}
-
-function renderProjectsCarousel(containerId, data, emptyMessage, carouselId) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
-    if (!Array.isArray(data) || data.length === 0) {
-        container.innerHTML = `<div class=\"alert alert-secondary text-center\">${emptyMessage}</div>`;
-        return;
-    }
-
-    const slides = chunkArray(data, 3);
+    const slides = chunkArray(sortedData, 3); 
     const carousel = document.createElement("div");
     carousel.className = "carousel slide project-carousel";
     carousel.id = carouselId;
