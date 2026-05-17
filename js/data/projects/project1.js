@@ -21,7 +21,7 @@ window.project1 = {
     "https://img.freepik.com/free-vector/banking-finance-background_23-2148764442.jpg"
   ],
   technologies: [".NET Core", "SQL Server", "API", "Entity Framework", "JWT", "Swagger"],
-  projectLink: "https://github.com/example/fintech-api",
+  projectLink: "https://github.com/rashidabbasi14/rashidabbasi14.github.io",
   liveLink: "https://fintech-api.example.com",
   duration: "Jan 2023 - Apr 2023",
   role: "Lead API Developer"

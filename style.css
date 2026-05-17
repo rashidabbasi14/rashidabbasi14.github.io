@@ -358,3 +358,101 @@ footer a {
 .btn-projects {
     min-width: 120px;
 }
+
+/* README.md Content Styles */
+#readmeContent {
+    background: linear-gradient(180deg, rgba(16, 31, 60, 0.96), rgba(8, 17, 30, 0.95));
+    border: 1px solid rgba(71, 184, 255, 0.16);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    margin-top: 3rem;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+#readmeContent h1, #readmeContent h2, #readmeContent h3, #readmeContent h4, #readmeContent h5, #readmeContent h6 {
+    color: var(--white);
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    line-height: 1.2;
+}
+
+#readmeContent h1 {
+    font-size: 2.2em;
+    border-bottom: 2px solid rgba(71, 184, 255, 0.3);
+    padding-bottom: 0.5em;
+}
+
+#readmeContent h2 {
+    font-size: 1.8em;
+    border-bottom: 1px solid rgba(71, 184, 255, 0.2);
+    padding-bottom: 0.4em;
+}
+
+#readmeContent h3 {
+    font-size: 1.5em;
+}
+
+#readmeContent p {
+    color: rgba(232, 238, 245, 0.88);
+    margin-bottom: 1em;
+}
+
+#readmeContent a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+#readmeContent a:hover {
+    text-decoration: underline;
+}
+
+#readmeContent ul, #readmeContent ol {
+    padding-left: 2em;
+    margin-bottom: 1em;
+    color: rgba(232, 238, 245, 0.88);
+}
+
+#readmeContent ul li, #readmeContent ol li {
+    margin-bottom: 0.5em;
+}
+
+#readmeContent code {
+    background-color: rgba(71, 184, 255, 0.1);
+    color: var(--accent);
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+#readmeContent pre {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(71, 184, 255, 0.1);
+    padding: 1em;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5em;
+}
+
+#readmeContent pre code {
+    background-color: transparent;
+    color: #e8eef5;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+#readmeContent blockquote {
+    border-left: 4px solid var(--accent);
+    padding-left: 1em;
+    margin: 1.5em 0;
+    color: rgba(232, 238, 245, 0.7);
+}
+
+#readmeContent img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

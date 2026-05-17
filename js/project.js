@@ -1,3 +1,4 @@
+let project = null;
 // Get project ID from URL
 function getProjectId() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -13,7 +14,7 @@ function getProjectData(id) {
 // Render project details
 function renderProject() {
     const projectId = getProjectId();
-    const project = getProjectData(projectId);
+    project = getProjectData(projectId);
     const container = document.getElementById('projectContent');
     
     if (!project) {
@@ -92,27 +93,74 @@ function renderProject() {
     if (project.liveLink) {
         galleryHTML += `<a href="${project.liveLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i>Live Demo</a>`;
     }
+
     galleryHTML += `<a href="projects.html" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-2"></i>Back to Projects</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h2 class="h4 mb-3">Project Overview</h2>
-                        <div class="project-description">${project.longDescription || project.description}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
     `;
 
     container.innerHTML = galleryHTML;
 
     // Initialize image gallery
     initializeGallery();
+
+    // Load and render README.md if projectLink is available
+    loadAndRenderReadme(project.projectLink);
+}
+
+// Function to load and render README.md
+async function loadAndRenderReadme(projectLink) {
+    const readmeContainer = document.getElementById("readmeContent");
+    if (!projectLink || !readmeContainer) {
+        return;
+    }
+
+    const githubRepoRegex = /https:\/\/github.com\/([^\/]+)\/([^\/]+)/;
+    const match = projectLink.match(githubRepoRegex);
+
+    if (match && match.length === 3) {
+        const username = match[1];
+        const repoName = match[2];
+        const readmeUrl = `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`;
+
+        try {
+            const response = await fetch(readmeUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch README.md: ${response.statusText}`);
+            }
+            const markdownText = await response.text();
+            
+            // Check if marked library is available
+            if (typeof marked !== 'undefined') {
+                readmeContainer.insertAdjacentHTML('beforeend', marked.parse(markdownText));
+            } else {
+                // Fallback: display raw markdown with basic formatting
+                console.warn("marked.js library not loaded, displaying raw markdown");
+                readmeContainer.innerHTML = `
+                    <h2 class="h4 mb-3">Project README</h2>
+                    <div class="alert alert-warning">
+                        <p>Unable to load the README viewer. Please <a href="${projectLink}" target="_blank">view the project on GitHub</a>.</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            readmeContainer.innerHTML = `                
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Project Overview</h2>
+                    <div class="project-description">${project.longDescription || project.description}</div>
+                </div>
+            `;
+        }
+    } else {
+        readmeContainer.innerHTML = `
+            <div class="alert mt-4">
+                <h4>Project Description not available</h4>
+                <p>The project link provided is not a GitHub repository, or the format is unrecognized.</p>
+                <a href="${projectLink}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info">Visit Project Link</a>
+            </div>
+        `;
+    }
 }
 
 // Image gallery functionality
