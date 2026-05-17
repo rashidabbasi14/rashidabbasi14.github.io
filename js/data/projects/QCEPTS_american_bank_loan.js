@@ -23,5 +23,6 @@ window.QCEPTS_american_bank_loan = {
   projectLink: "https://github.com/rashidabbasi14/QCEPTS-american-bank-loan",
   liveLink: "https://qcepts-american-bank-loan.vercel.app/",
   duration: "2 Months",
-  role: "Backend Architect & Database Engineer"
+  role: "Backend Architect & Database Engineer",
+  priority: true
 };

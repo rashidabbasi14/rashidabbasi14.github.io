@@ -21,5 +21,6 @@ window.PROJECT_income_tax_calculator = {
   projectLink: "https://github.com/rashidabbasi14/PROJECT-income-tax-calculator",
   liveLink: "https://project-income-tax-calculator.vercel.app/",
   duration: "1 Week",
-  role: "Frontend Developer"
+  role: "Frontend Developer",
+  priority: true
 };

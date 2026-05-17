@@ -22,5 +22,6 @@ window.PROJECT_split_wiser = {
   projectLink: "https://github.com/rashidabbasi14/PROJECT-split-wiser",
   liveLink: "https://project-split-wiser.vercel.app/",
   duration: "1 Month",
-  role: "Full Stack Developer"
+  role: "Full Stack Developer",
+  priority: true
 };

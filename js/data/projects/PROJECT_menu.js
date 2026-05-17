@@ -21,5 +21,6 @@ window.PROJECT_menu = {
   projectLink: "https://github.com/rashidabbasi14/PROJECT-menu",
   liveLink: "https://monthly-menu-lilac.vercel.app/",
   duration: "2 Weeks",
-  role: "Full Stack Developer"
+  role: "Full Stack Developer",
+  priority: true
 };

@@ -21,5 +21,6 @@ window.rashidabbasi14_github_io = {
   projectLink: "https://github.com/rashidabbasi14/rashidabbasi14.github.io",
   liveLink: "https://rashidabbasi14.github.io",
   duration: "1 Week",
-  role: "Frontend Engineer & UI Designer"
+  role: "Frontend Engineer & UI Designer",
+  priority: true
 };

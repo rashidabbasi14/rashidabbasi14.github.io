@@ -21,5 +21,6 @@ window.PROJECT_vendure = {
   projectLink: "https://github.com/rashidabbasi14/PROJECT-vendure",
   liveLink: "",
   duration: "3 Weeks",
-  role: "Backend Engineer & Commerce Developer"
+  role: "Backend Engineer & Commerce Developer",
+  priority: true
 };
