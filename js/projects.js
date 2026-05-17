@@ -15,6 +15,11 @@ function renderProjects(projectsToRender) {
             const col = document.createElement("div");
             col.className = "col";
             
+            // Create an anchor tag to wrap the entire card
+            const cardLink = document.createElement("a");
+            cardLink.href = `project.html?id=${project.id}`;
+            cardLink.className = "text-decoration-none text-reset d-block h-100"; // Keeps text styling intact and maintains layout
+            
             const card = document.createElement("div");
             card.className = "card project-card shadow-sm h-100";
             
@@ -47,20 +52,18 @@ function renderProjects(projectsToRender) {
                 tags.appendChild(badge);
             });
             
-            const link = document.createElement("a");
-            link.href = `project.html?id=${project.id}`;
-            link.className = "btn btn-outline-primary mt-3 w-100";
-            link.innerHTML = "<i class=\"fas fa-arrow-right me-2\"></i>View Project";
-            
+            // Build the card hierarchy
             body.appendChild(title);
             body.appendChild(subtitle);
             body.appendChild(description);
             body.appendChild(tags);
-            body.appendChild(link);
             
             card.appendChild(image);
             card.appendChild(body);
-            col.appendChild(card);
+            
+            // Append the card into the anchor link, then into the column
+            cardLink.appendChild(card);
+            col.appendChild(cardLink);
             container.appendChild(col);
         });
     } else {

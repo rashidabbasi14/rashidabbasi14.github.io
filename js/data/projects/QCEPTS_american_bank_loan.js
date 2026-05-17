@@ -21,7 +21,7 @@ window.QCEPTS_american_bank_loan = {
   ],
   technologies: ["Node.js", "Express.js", "MongoDB", "Mongoose", "JWT", "Amortization Algorithms"],
   projectLink: "https://github.com/rashidabbasi14/QCEPTS-american-bank-loan",
-  liveLink: "hhttps://qcepts-american-bank-loan.vercel.app/",
+  liveLink: "https://qcepts-american-bank-loan.vercel.app/",
   duration: "2 Months",
   role: "Backend Architect & Database Engineer"
 };

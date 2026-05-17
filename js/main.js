@@ -267,7 +267,7 @@ function renderProjects(containerId, data, emptyMessage) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
     if (!Array.isArray(data) || data.length === 0) {
-        container.innerHTML = `<div class=\"alert alert-secondary text-center\">${emptyMessage}</div>`;
+        container.innerHTML = `<div class="alert alert-secondary text-center">${emptyMessage}</div>`;
         return;
     }
 
@@ -278,8 +278,11 @@ function renderProjects(containerId, data, emptyMessage) {
         const col = document.createElement("div");
         col.className = "col";
         
-        const card = document.createElement("div");
-        card.className = "card project-card shadow-sm h-100";
+        // Changed from a 'div' to an 'a' tag to make the whole card clickable
+        const card = document.createElement("a");
+        card.href = `project.html?id=${item.id}`;
+        // Added Bootstrap utilities to remove default link styling
+        card.className = "card project-card shadow-sm h-100 text-decoration-none text-reset";
         
         if (item.image) {
             const image = document.createElement("img");
@@ -315,11 +318,7 @@ function renderProjects(containerId, data, emptyMessage) {
             body.appendChild(createTagList(item.tags));
         }
         
-        const link = document.createElement("a");
-        link.href = `project.html?id=${item.id}`;
-        link.className = "btn btn-outline-primary mt-3 w-100";
-        link.innerHTML = "<i class=\"fas fa-arrow-right me-2\"></i>View Project";
-        body.appendChild(link);
+        // The individual link button has been completely removed from here
         
         card.appendChild(body);
         col.appendChild(card);
@@ -387,8 +386,11 @@ function renderProjectsCarousel(containerId, data, emptyMessage, carouselId) {
 }
 
 function createProjectCard(item) {
-    const card = document.createElement("div");
-    card.className = "card project-card shadow-sm h-100";
+    // Changed from a 'div' to an 'a' tag to make the entire card clickable
+    const card = document.createElement("a");
+    card.href = `project.html?id=${item.id}`;
+    // Added Bootstrap utilities to clear default link colors and underlines
+    card.className = "card project-card shadow-sm h-100 text-decoration-none text-reset";
     
     if (item.coverImage) {
         const image = document.createElement("img");
@@ -424,11 +426,7 @@ function createProjectCard(item) {
         body.appendChild(createTagList(item.technologies));
     }
     
-    const link = document.createElement("a");
-    link.href = `project.html?id=${item.id}`;
-    link.className = "btn btn-outline-primary mt-3 w-100";
-    link.innerHTML = "<i class=\"fas fa-arrow-right me-2\"></i>View Project";
-    body.appendChild(link);
+    // The "View Project" button elements have been completely removed from here
     
     card.appendChild(body);
     return card;

@@ -228,12 +228,14 @@ h2 {
 }
 
 .card .card-body {
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .card .card-body p {
     color: rgba(232, 238, 245, 0.88);
-    line-height: 1.9;
+    line-height: 1.6;
+    font-size: 13px;
+    margin-bottom: 0rem;
 }
 
 .card .card-body h3,
@@ -245,10 +247,9 @@ h2 {
     background: rgba(71, 184, 255, 0.12);
     color: var(--accent);
     border: 1px solid rgba(71, 184, 255, 0.18);
-    padding: 0.45rem 0.7rem;
     border-radius: 999px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
 }
 
 footer {
