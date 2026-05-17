@@ -141,6 +141,7 @@ h2 {
 
 .project-carousel .carousel-indicators {
     justify-content: center;
+    bottom: auto;
 }
 
 .project-carousel .carousel-indicators [data-bs-target] {
