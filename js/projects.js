@@ -69,6 +69,7 @@ function renderProjects(projectsToRender) {
 }
 
 // Filter projects based on search query and active filters
+// Filter projects based on search query and active filters
 function filterProjects() {
     const searchInput = document.getElementById("projectSearch");
     const searchQuery = searchInput ? searchInput.value.toLowerCase() : "";
@@ -87,7 +88,16 @@ function filterProjects() {
         return matchesSearch && matchesFilters;
     });
 
-    renderProjects(filtered);
+    // --- SORTING LOGIC FOR PRIORITY PROJECTS ---
+    // If a project has priority === true, it gets pushed to the top
+    const sortedAndFiltered = filtered.sort((a, b) => {
+        const aPriority = a.priority === true ? 1 : 0;
+        const bPriority = b.priority === true ? 1 : 0;
+        
+        return bPriority - aPriority; 
+    });
+
+    renderProjects(sortedAndFiltered);
 }
 
 // Render filter checkboxes inside the searchable dropdown
