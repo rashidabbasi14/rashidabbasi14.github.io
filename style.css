@@ -29,6 +29,10 @@ header {
     align-items: center;
 }
 
+.dropdown-item {
+    padding: 4px 24px;
+}
+
 header.main{
     min-height: 60vh;
 

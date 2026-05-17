@@ -1,8 +1,17 @@
+// Global state for active filters
+let activeFilters = [];
+
 // Render projects on the projects page
-function renderProjects(allProjects) {
+function renderProjects(projectsToRender) {
     const container = document.getElementById("projectsContainer");
-    if (typeof allProjects !== "undefined" && allProjects.length > 0) {
-        allProjects.forEach(project => {
+    if (!container) return;
+    
+    container.innerHTML = ""; // Clear existing projects
+
+    if (typeof projectsToRender !== "undefined" && projectsToRender.length > 0) {
+        projectsToRender.forEach(project => {
+            if (!project || !project.title) return; // Skip invalid projects
+            
             const col = document.createElement("div");
             col.className = "col";
             
@@ -23,15 +32,15 @@ function renderProjects(allProjects) {
             
             const subtitle = document.createElement("p");
             subtitle.className = "mb-2 text-light-soft";
-            subtitle.textContent = project.subtitle;
+            subtitle.textContent = project.subtitle || "";
             
             const description = document.createElement("p");
             description.className = "flex-grow-1";
-            description.textContent = project.description;
+            description.textContent = project.description || "";
             
             const tags = document.createElement("div");
             tags.className = "project-tags";
-            project.technologies.forEach(tag => {
+            (project.technologies || []).forEach(tag => {
                 const badge = document.createElement("span");
                 badge.className = "badge bg-light text-primary me-2 mb-2";
                 badge.textContent = tag;
@@ -54,8 +63,117 @@ function renderProjects(allProjects) {
             col.appendChild(card);
             container.appendChild(col);
         });
+    } else {
+        container.innerHTML = "<p class=\"text-center text-light-soft\">No projects found matching your criteria.</p>";
     }
 }
 
-// No need to call renderProjects on DOMContentLoaded here, as it's now called from main.js
-// document.addEventListener("DOMContentLoaded", renderProjects);
+// Filter projects based on search query and active filters
+function filterProjects() {
+    const searchInput = document.getElementById("projectSearch");
+    const searchQuery = searchInput ? searchInput.value.toLowerCase() : "";
+    const allProjects = window.getProjectFiles().map(filename => window[filename]).filter(p => p);
+
+    const filtered = allProjects.filter(project => {
+        const matchesSearch = (
+            project.title.toLowerCase().includes(searchQuery) ||
+            project.description.toLowerCase().includes(searchQuery) ||
+            (project.technologies || []).some(tech => tech.toLowerCase().includes(searchQuery))
+        );
+
+        const matchesFilters = activeFilters.length === 0 || 
+                               (project.technologies || []).some(tech => activeFilters.includes(tech));
+
+        return matchesSearch && matchesFilters;
+    });
+
+    renderProjects(filtered);
+}
+
+// Render filter checkboxes inside the searchable dropdown
+function renderFilters() {
+    const filterContainer = document.getElementById("projectFilters");
+    if (!filterContainer) return;
+    
+    filterContainer.innerHTML = "";
+
+    const allProjects = window.getProjectFiles().map(filename => window[filename]).filter(p => p);
+    const allTechnologies = allProjects.reduce((acc, project) => {
+        (project.technologies || []).forEach(tech => acc.add(tech));
+        return acc;
+    }, new Set());
+
+    // Sort technologies alphabetically for better user experience
+    const sortedTechnologies = Array.from(allTechnologies).sort();
+
+    sortedTechnologies.forEach(tech => {
+        const itemContainer = document.createElement("div");
+        itemContainer.className = "form-check dropdown-item py-1 rounded";
+        itemContainer.style.cursor = "pointer";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "form-check-input filter-checkbox me-2";
+        checkbox.id = `tech-${tech.replace(/\s+/g, '-')}`;
+        checkbox.checked = activeFilters.includes(tech);
+
+        const label = document.createElement("label");
+        label.className = "form-check-label w-100 text-truncate";
+        label.htmlFor = checkbox.id;
+        label.textContent = tech;
+        label.style.cursor = "pointer";
+
+        // Toggle logic when the row or checkbox is clicked
+        const handleToggle = (e) => {
+            // Prevent double triggers if clicking the label specifically
+            if (e.target === label) return; 
+            
+            if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+
+            if (checkbox.checked) {
+                if (!activeFilters.includes(tech)) activeFilters.push(tech);
+            } else {
+                activeFilters = activeFilters.filter(filter => filter !== tech);
+            }
+
+            updateDropdownButtonLabel();
+            filterProjects();
+        };
+
+        itemContainer.addEventListener("click", handleToggle);
+
+        itemContainer.appendChild(checkbox);
+        itemContainer.appendChild(label);
+        filterContainer.appendChild(itemContainer);
+    });
+
+    updateDropdownButtonLabel();
+}
+
+// Dynamically updates the button label to show how many items are active
+function updateDropdownButtonLabel() {
+    const btn = document.getElementById("filterDropdownBtn");
+    if (!btn) return;
+    if (activeFilters.length === 0) {
+        btn.textContent = "Filter";
+    } else {
+        btn.textContent = `Filter (${activeFilters.length})`;
+    }
+}
+
+// Initialize projects page
+function initProjects() {
+    renderFilters();
+    filterProjects(); // Initial render with all projects
+    
+    // Setup search input listener
+    const searchInput = document.getElementById("projectSearch");
+    if (searchInput) {
+        searchInput.addEventListener("input", filterProjects);
+    }
+}
+
+// Make initProjects globally available
+window.initProjects = initProjects;

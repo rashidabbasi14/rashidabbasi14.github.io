@@ -20,26 +20,28 @@ async function init() {
     }
 
     const path = window.location.pathname.split("/").pop();
-    await loadScript("js/data/projects/index.js"); 
-    await Promise.all(getProjectFilePaths().map(loadScript));
+    await loadScript("js/data/projects/index.js");
+    await Promise.all(window.getProjectFilePaths().map(loadScript));
     
     if (path === "index.html" || path === "") {
         await loadScript("js/data/employment-data.js");
         await loadScript("js/data/certifications-data.js");
         
         renderEmployment(typeof employmentData !== "undefined" ? employmentData : []);
-        const allProjects = getProjectFiles().map(filename => window[filename]);
+        const allProjects = window.getProjectFiles().map(filename => window[filename]);
         renderProjectsCarousel("projectContent", allProjects, "No project entries found.", "projectCarousel");
         renderCertificationCarousel("certificationContent", typeof certificationsData !== "undefined" ? certificationsData : [], "No certification entries found.", "certCarousel");
 
     } else if (path === "projects.html") {
-        await loadScript("js/projects.js"); 
-        if (typeof renderProjects === "function") {
-            const allProjects = getProjectFiles().map(filename => window[filename]);
-            renderProjects(allProjects);
-        }
+        await loadScript("js/projects.js");
+        // Initialize projects after a small delay to ensure all scripts are loaded
+        setTimeout(() => {
+            if (typeof initProjects === "function") {
+                initProjects();
+            }
+        }, 500);
     } else if (path === "project.html") {
-        await loadScript("js/project.js"); 
+        await loadScript("js/project.js");
         if (typeof renderProject === "function") {
             renderProject();
         }
@@ -656,3 +658,26 @@ function renderEmployment(data) {
 }
 
 window.addEventListener("DOMContentLoaded", init);
+
+// Event Listener for searching tags within the dropdown
+document.addEventListener("DOMContentLoaded", () => {
+    const tagSearchInput = document.getElementById("tagSearchInput");
+    
+    if (tagSearchInput) {
+        tagSearchInput.addEventListener("input", (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll("#projectFilters .dropdown-item");
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.classList.remove("d-none");
+                    item.classList.add("d-flex");
+                } else {
+                    item.classList.remove("d-flex");
+                    item.classList.add("d-none");
+                }
+            });
+        });
+    }
+});

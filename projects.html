@@ -33,6 +33,27 @@
         <main>
             <section class="py-5">
                 <div class="container">
+                    <div class="row mb-4 g-2">
+                        <div class="col-9">
+                            <input type="text" id="projectSearch" class="form-control" placeholder="Search projects by title, description, or tags...">
+                        </div>
+                        <div class="col-3">
+                            <!-- Searchable Dropdown Button -->
+                            <div class="dropdown w-100">
+                                <button class="btn btn-outline-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" id="filterDropdownBtn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    Filters
+                                </button>
+                                <div class="dropdown-menu p-3 w-100" aria-labelledby="filterDropdownBtn">
+                                    <!-- Inner Search Input for Tags -->
+                                    <input type="text" id="tagSearchInput" class="form-control form-control-sm mb-2" placeholder="Search technologies...">
+                                    <!-- Scrollable Container for Dynamic Checkboxes -->
+                                    <div id="projectFilters" class="overflow-auto" style="max-height: 200px;">
+                                        <!-- Filter items will be loaded dynamically here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="projectsContainer" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                         <!-- Projects will be loaded dynamically -->
                     </div>

@@ -19,11 +19,11 @@ const projectFiles = [
 ];
 
 // Function to get all project filenames
-function getProjectFiles() {
+window.getProjectFiles = function() {
   return projectFiles;
-}
+};
 
 // Function to get project filenames with full path
-function getProjectFilePaths() {
+window.getProjectFilePaths = function() {
   return projectFiles.map(file => `js/data/projects/${file}.js`);
-}
+};
