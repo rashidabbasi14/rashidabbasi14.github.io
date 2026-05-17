@@ -25,9 +25,13 @@ header {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 60vh;
     display: flex;
     align-items: center;
+}
+
+header.main{
+    min-height: 60vh;
+
 }
 
 .navbar.bg-primary {
