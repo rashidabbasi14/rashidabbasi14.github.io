@@ -247,6 +247,11 @@ function chunkArray(array, size) {
     return chunks;
 }
 
+// Returns true when the viewport is narrower than Bootstrap's md breakpoint
+function isMobile() {
+    return window.innerWidth < 768;
+}
+
 function renderCards(containerId, data, emptyMessage) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -274,12 +279,15 @@ function renderProjectsCarousel(containerId, data, emptyMessage, carouselId) {
     }
     const sortedData = [...data].sort((a, b) => (b.priority === true) - (a.priority === true));
 
-    const slides = chunkArray(sortedData, 3); 
+    // 1 card per slide on mobile, 3 on desktop
+    const slideSize = isMobile() ? 1 : 3;
+    const slides = chunkArray(sortedData, slideSize);
+
     const carousel = document.createElement("div");
     carousel.className = "carousel slide project-carousel";
     carousel.id = carouselId;
     carousel.setAttribute("data-bs-ride", "carousel");
-    carousel.setAttribute("data-bs-interval", "12000");
+    carousel.setAttribute("data-bs-interval", "8000"); // Increased speed (was 12000)
     carousel.setAttribute("data-bs-pause", "false");
 
     const inner = document.createElement("div");
@@ -378,12 +386,15 @@ function renderCertificationCarousel(containerId, data, emptyMessage, carouselId
         return;
     }
 
-    const slides = chunkArray(data, 3);
+    // 1 card per slide on mobile, 3 on desktop
+    const slideSize = isMobile() ? 1 : 3;
+    const slides = chunkArray(data, slideSize);
+
     const carousel = document.createElement("div");
     carousel.className = "carousel slide project-carousel";
     carousel.id = carouselId;
     carousel.setAttribute("data-bs-ride", "carousel");
-    carousel.setAttribute("data-bs-interval", "12000");
+    carousel.setAttribute("data-bs-interval", "8000"); // Increased speed (was 12000)
     carousel.setAttribute("data-bs-pause", "false");
 
     const inner = document.createElement("div");
@@ -711,6 +722,26 @@ function renderEmployment(data) {
 }
 
 window.addEventListener("DOMContentLoaded", init);
+
+// Rebuild carousels on resize so mobile/desktop slide count stays correct
+let _carouselResizeTimer;
+window.addEventListener("resize", () => {
+    clearTimeout(_carouselResizeTimer);
+    _carouselResizeTimer = setTimeout(() => {
+        const path = window.location.pathname.split("/").pop();
+        if (path !== "index.html" && path !== "") return;
+
+        const allProjects = window.getProjectFiles
+            ? window.getProjectFiles().map(filename => window[filename])
+            : [];
+        if (allProjects.length) {
+            renderProjectsCarousel("projectContent", allProjects, "No project entries found.", "projectCarousel");
+        }
+        if (typeof certificationsData !== "undefined") {
+            renderCertificationCarousel("certificationContent", certificationsData, "No certification entries found.", "certCarousel");
+        }
+    }, 250);
+});
 
 // Event Listener for searching tags within the dropdown
 document.addEventListener("DOMContentLoaded", () => {
