@@ -510,14 +510,14 @@ function createSkillSection(category) {
             const img = document.createElement("img");
             img.src = item.image;
             img.alt = item.name;
-            img.className = "rounded-circle border border-1 border-info"; // Fixed border visibility
+            img.className = ""; // Fixed border visibility
             img.style.width = "50px";
             img.style.height = "50px";
             img.style.objectFit = "cover";
             img.onerror = function() {
                 this.style.display = "none";
                 const fallback = document.createElement("div");
-                fallback.className = "rounded-circle border border-1 border-info d-flex align-items-center justify-content-center";
+                fallback.className = "d-flex align-items-center justify-content-center";
                 fallback.style.width = "50px";
                 fallback.style.height = "50px";
                 fallback.style.background = "rgba(71, 184, 255, 0.2)";

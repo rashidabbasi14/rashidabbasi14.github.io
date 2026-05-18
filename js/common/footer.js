@@ -8,19 +8,19 @@ function renderFooter() {
                 <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                     <h5 class="footer-heading">Contact</h5>
                     <div class="footer-contact-item mb-3">
-                    <i class="fas fa-envelope footer-icon"></i>
+                    <i class="fas fa-envelope footer-icon text-primary"></i>
                     <a id="footer-email" href="mailto:rashidabbasi17@gmail.com" class="footer-contact-link">
                         <span>rashidabbasi17@gmail.com</span>
                     </a>
                     </div>
                     <div class="footer-contact-item mb-3">
-                    <i class="fas fa-phone footer-icon black"></i>
+                    <i class="fas fa-phone footer-icon text-success"></i>
                     <a id="footer-phone" href="tel:+923313817104" class="footer-contact-link">
                         <span>+92 331 381 7104</span>
                     </a>
                     </div>
                     <div class="footer-contact-item">
-                    <i class="fas fa-map-marker-alt footer-icon"></i>
+                    <i class="fas fa-map-marker-alt footer-icon text-danger"></i>
                     <a id="footer-location" href="https://maps.app.goo.gl/6b4j5YXq5qJ5qJ5q9" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
                         <span>Karachi, Pakistan</span>
                     </a>
