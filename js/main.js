@@ -17,6 +17,9 @@ async function init() {
     // Populate all data from myData
     if (typeof myData !== "undefined") {
         populateFromMyData(myData);
+        if (Array.isArray(myData.skills)) {
+            renderSkills(myData.skills);
+        }
     }
 
     const path = window.location.pathname.split("/").pop();
@@ -422,6 +425,119 @@ function renderCertificationCarousel(containerId, data, emptyMessage, carouselId
     }
 
     container.appendChild(carousel);
+}
+
+function renderSkills(skillCategories) {
+    const container = document.getElementById("skills-content");
+    if (!container) return;
+    container.innerHTML = "";
+    if (!Array.isArray(skillCategories) || skillCategories.length === 0) {
+        container.innerHTML = "<p class='text-light-soft'>No skills data available.</p>";
+        return;
+    }
+    
+    const titleContainer = document.createElement("div");
+    titleContainer.className = "d-flex justify-content-between align-items-center mb-3";
+
+    const title = document.createElement("h5");
+    title.className = "text-light mb-0";
+    title.textContent = "Skills & Technologies";
+    titleContainer.appendChild(title);
+    
+    const wrapper = document.createElement("div");
+    wrapper.className = "skills-wrapper";
+    
+    const visibleCategories = skillCategories.slice(0, 3);
+    const hiddenCategories = skillCategories.slice(3);
+    
+    visibleCategories.forEach(category => {
+        const section = createSkillSection(category);
+        wrapper.appendChild(section);
+    });
+    
+    if (hiddenCategories.length > 0) {
+        const collapseBtn = document.createElement("button");
+        collapseBtn.className = "btn btn-outline-light btn-sm";
+        collapseBtn.type = "button";
+        collapseBtn.setAttribute("data-bs-toggle", "collapse");
+        collapseBtn.setAttribute("data-bs-target", "#moreSkillsCollapse");
+        collapseBtn.innerHTML = "All Skills <i class='fas fa-chevron-down ms-1'></i>";
+        titleContainer.appendChild(collapseBtn);
+        
+        const collapseWrapper = document.createElement("div");
+        collapseWrapper.className = "collapse mt-3";
+        collapseWrapper.id = "moreSkillsCollapse";
+        
+        hiddenCategories.forEach(category => {
+            const section = createSkillSection(category);
+            collapseWrapper.appendChild(section);
+        });
+        
+        container.appendChild(titleContainer);
+        container.appendChild(wrapper);
+        container.appendChild(collapseWrapper);
+    } else {
+        container.appendChild(titleContainer);
+        container.appendChild(wrapper);
+    }
+}
+
+function createSkillSection(category) {
+    const section = document.createElement("div");
+    section.className = "skill-section row";
+    
+    const itemsContainer = document.createElement("div");
+    itemsContainer.className = "skill-items d-flex flex-wrap gap-2 col-10";
+    
+    if (category.items && Array.isArray(category.items)) {
+        category.items.forEach(item => {
+            const skillItem = document.createElement("div");
+            skillItem.className = "text-center";
+            skillItem.style.margin = "4px";
+            
+            const img = document.createElement("img");
+            img.src = item.image;
+            img.alt = item.name;
+            img.className = "rounded-circle border-info";
+            img.style.width = "50px";
+            img.style.height = "50px";
+            img.style.objectFit = "cover";
+            img.onerror = function() {
+                this.style.display = "none";
+                const fallback = document.createElement("div");
+                fallback.className = "rounded-circle border-info d-flex align-items-center justify-content-center";
+                fallback.style.width = "50px";
+                fallback.style.height = "50px";
+                fallback.style.background = "rgba(71, 184, 255, 0.2)";
+                fallback.style.fontSize = "12px";
+                fallback.style.fontWeight = "600";
+                fallback.textContent = item.name.substring(0, 2).toUpperCase();
+                fallback.title = item.name;
+                skillItem.appendChild(fallback);
+            };
+            
+            const name = document.createElement("p");
+            name.className = "mb-0 mt-1 text-light-soft small";
+            name.textContent = item.name;
+            
+            skillItem.appendChild(img);
+            skillItem.appendChild(name);
+            itemsContainer.appendChild(skillItem);
+        });
+    }
+    
+    const categoryHeader = document.createElement("div");
+    categoryHeader.className = "mb-2 col-2 d-flex align-items-center justify-content-center";
+    
+    const categoryTitle = document.createElement("h6");
+    categoryTitle.className = "mb-0 text-light";
+    categoryTitle.textContent = category.name;
+    
+    categoryHeader.appendChild(categoryTitle);
+    section.appendChild(categoryHeader);
+    section.appendChild(itemsContainer);
+    
+    return section;
 }
 
 function renderEmployment(data) {
