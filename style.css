@@ -136,10 +136,29 @@ h2 {
     color: var(--white);
 }
 
+/* When the button IS collapsed (content is hidden) */
+.btn.collapsed .read-less-text,
+.btn.collapsed .read-less-icon {
+    display: none;
+}
+.btn.collapsed .read-more-text,
+.btn.collapsed .read-more-icon {
+    display: inline-block;
+}
+
+/* When the button IS NOT collapsed (content is expanded) */
+.btn:not(.collapsed) .read-more-text,
+.btn:not(.collapsed) .read-more-icon {
+    display: none;
+}
+.btn:not(.collapsed) .read-less-text,
+.btn:not(.collapsed) .read-less-icon {
+    display: inline-block;
+}
+
 .project-tags {
     margin-top: 1rem;
 }
-
 .project-carousel .carousel-indicators {
     justify-content: center;
     bottom: auto;

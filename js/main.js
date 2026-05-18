@@ -111,7 +111,7 @@ function populateFromMyData(data) {
         if (headerDescription && data.description) headerDescription.textContent = data.description;
 
         const aboutContent = document.getElementById("about-content");
-        if (aboutContent && data.aboutMe) aboutContent.textContent = data.aboutMe;
+        if (aboutContent && data.aboutMe) aboutContent.innerHTML = data.aboutMe;
 
         const educationContent = document.getElementById("education-content");
         if (educationContent && Array.isArray(data.education)) {
