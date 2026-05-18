@@ -484,10 +484,11 @@ function renderSkills(skillCategories) {
 
 function createSkillSection(category) {
     const section = document.createElement("div");
-    section.className = "skill-section row";
+    section.className = "skill-section mt-1 row gy-3 gy-md-0 align-items-center"; // Added gy-3 for mobile vertical spacing
     
     const itemsContainer = document.createElement("div");
-    itemsContainer.className = "skill-items d-flex flex-wrap gap-2 col-10";
+    // Changed col-10 to col-12 col-md-10
+    itemsContainer.className = "skill-items d-flex flex-wrap gap-2 justify-content-center justify-content-md-start col-12 col-md-10";
     
     if (category.items && Array.isArray(category.items)) {
         category.items.forEach(item => {
@@ -498,14 +499,14 @@ function createSkillSection(category) {
             const img = document.createElement("img");
             img.src = item.image;
             img.alt = item.name;
-            img.className = "rounded-circle border-info";
+            img.className = "rounded-circle border border-1 border-info"; // Fixed border visibility
             img.style.width = "50px";
             img.style.height = "50px";
             img.style.objectFit = "cover";
             img.onerror = function() {
                 this.style.display = "none";
                 const fallback = document.createElement("div");
-                fallback.className = "rounded-circle border-info d-flex align-items-center justify-content-center";
+                fallback.className = "rounded-circle border border-1 border-info d-flex align-items-center justify-content-center";
                 fallback.style.width = "50px";
                 fallback.style.height = "50px";
                 fallback.style.background = "rgba(71, 184, 255, 0.2)";
@@ -513,7 +514,7 @@ function createSkillSection(category) {
                 fallback.style.fontWeight = "600";
                 fallback.textContent = item.name.substring(0, 2).toUpperCase();
                 fallback.title = item.name;
-                skillItem.appendChild(fallback);
+                skillItem.insertBefore(fallback, name); // Safely insert fallback before text element
             };
             
             const name = document.createElement("p");
@@ -527,13 +528,16 @@ function createSkillSection(category) {
     }
     
     const categoryHeader = document.createElement("div");
-    categoryHeader.className = "mb-2 col-2 d-flex align-items-center justify-content-center";
+    // Changed col-2 to col-12 col-md-2, added adaptive text alignments
+    categoryHeader.className = "mb-2 mb-md-0 col-12 col-md-2 text-center text-md-start";
     
     const categoryTitle = document.createElement("h6");
-    categoryTitle.className = "mb-0 text-light";
+    categoryTitle.className = "mb-0 text-light fw-bold";
     categoryTitle.textContent = category.name;
     
     categoryHeader.appendChild(categoryTitle);
+    
+    // Append order matters: header first (top on mobile, left on desktop)
     section.appendChild(categoryHeader);
     section.appendChild(itemsContainer);
     
@@ -598,7 +602,7 @@ function renderEmployment(data) {
             headerBtn.setAttribute("data-bs-target", "#employmentCollapse");
             headerBtn.setAttribute("aria-expanded", "false");
             headerBtn.setAttribute("aria-controls", "employmentCollapse");
-            headerBtn.textContent = "View previous roles";
+            headerBtn.textContent = "All roles";
             if (headerCol) headerCol.appendChild(headerBtn);
         } else {
             headerBtn.style.display = "";
@@ -695,11 +699,11 @@ function renderEmployment(data) {
         const toggleBtn = document.getElementById("employmentToggleBtn");
         if (collapseEl && toggleBtn) {
             collapseEl.addEventListener("shown.bs.collapse", () => {
-                toggleBtn.textContent = "Hide previous roles";
+                toggleBtn.textContent = "Hide roles";
                 toggleBtn.setAttribute("aria-expanded", "true");
             });
             collapseEl.addEventListener("hidden.bs.collapse", () => {
-                toggleBtn.textContent = "View previous roles";
+                toggleBtn.textContent = "All roles";
                 toggleBtn.setAttribute("aria-expanded", "false");
             });
         }
