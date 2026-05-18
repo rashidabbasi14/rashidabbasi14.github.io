@@ -12,10 +12,13 @@ window.rashidabbasi14_github_io = {
       <li><strong>Static Edge Deployment:</strong> Built to compile into lightweight, distribution-ready assets designed for optimal performance on GitHub Pages networks.</li>
     </ul>
   `,
-  coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/main.png",
   images: [
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80"
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/main.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/employments.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/projects.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/project.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/projects-and-certifications.png",
   ],
   technologies: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS", "GitHub Pages", "JSON Binding"],
   projectLink: "https://github.com/rashidabbasi14/rashidabbasi14.github.io",
