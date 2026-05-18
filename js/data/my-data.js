@@ -75,8 +75,8 @@ const myData = {
         { name: "Kubernetes", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" },
         { name: "AWS", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
         { name: "Azure", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" },
-        { name: "GitHub", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" },
         { name: "Jenkins", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" },
+        { name: "GitHub", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" },
       ]
     },
     {
@@ -93,13 +93,13 @@ const myData = {
     {
       name: "Hosting & Domains",
       items: [
-        { name: "Vercel", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
         { name: "Wordpress", image: "https://static.vecteezy.com/system/resources/thumbnails/020/975/579/small/wordpress-logo-wordpress-icon-transparent-free-png.png" },
         { name: "Shopify", image: "https://cdn.simpleicons.org/shopify" },
         { name: "Namecheap", image: "https://cdn.simpleicons.org/namecheap" },
         { name: "GoDaddy", image: "https://cdn.simpleicons.org/godaddy" },
         { name: "Hostinger", image: "https://cdn.simpleicons.org/hostinger" },
         { name: "Wix", image: "https://cdn.simpleicons.org/wix" },
+        { name: "Vercel", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" },
       ]
     },
     {
@@ -107,8 +107,8 @@ const myData = {
       items: [
         { name: "VS Code", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" },
         { name: "Visual Studio", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/visualstudio/visualstudio-original.svg" },
-        { name: "Cursor", image: "https://cdn.simpleicons.org/cursor" },
         { name: "Android Studio", image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg" },
+        { name: "Cursor", image: "https://cdn.simpleicons.org/cursor" },
       ]
     },
     {
@@ -124,9 +124,9 @@ const myData = {
     {
       name: "AI Tools & Development",
       items: [
-        { name: "ChatGPT", image: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg" },
         { name: "Claude Code", image: "https://cdn.simpleicons.org/claude" },
         { name: "Gemini", image: "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/gemini-color.png" },
+        { name: "ChatGPT", image: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg" },
         { name: "Roo Code", image: "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/roocode.png" },        
         { name: "Github Copilot", image: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/githubcopilot.svg" },        
         { name: "Ollama", image: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ollama.svg" },

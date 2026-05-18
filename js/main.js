@@ -499,7 +499,7 @@ function createSkillSection(category) {
     
     const itemsContainer = document.createElement("div");
     // Changed col-10 to col-12 col-md-10
-    itemsContainer.className = "skill-items d-flex flex-wrap gap-2 justify-content-center justify-content-md-start col-12 col-md-10";
+    itemsContainer.className = "skill-items d-flex flex-wrap gap-2 justify-content-md-start col-12 col-md-10";
     
     if (category.items && Array.isArray(category.items)) {
         category.items.forEach(item => {
@@ -511,15 +511,15 @@ function createSkillSection(category) {
             img.src = item.image;
             img.alt = item.name;
             img.className = ""; // Fixed border visibility
-            img.style.width = "50px";
-            img.style.height = "50px";
+            img.style.width = "35px";
+            img.style.height = "35px";
             img.style.objectFit = "cover";
             img.onerror = function() {
                 this.style.display = "none";
                 const fallback = document.createElement("div");
                 fallback.className = "d-flex align-items-center justify-content-center";
-                fallback.style.width = "50px";
-                fallback.style.height = "50px";
+                fallback.style.width = "35px";
+                fallback.style.height = "35px";
                 fallback.style.background = "rgba(71, 184, 255, 0.2)";
                 fallback.style.fontSize = "12px";
                 fallback.style.fontWeight = "600";
@@ -530,6 +530,7 @@ function createSkillSection(category) {
             
             const name = document.createElement("p");
             name.className = "mb-0 mt-1 text-light-soft small";
+            name.style.fontSize = "12px";
             name.textContent = item.name;
             
             skillItem.appendChild(img);

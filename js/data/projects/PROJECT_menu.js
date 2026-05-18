@@ -12,8 +12,9 @@ window.PROJECT_menu = {
       <li><strong>Mobile-First Content Engine:</strong> Renders fluid layouts optimized specifically for mobile browsing viewports, enabling fast image rendering and smooth swiping mechanisms.</li>
     </ul>
   `,
-  coverImage: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80",
+  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/PROJECT-menu/refs/heads/main/readme/project-pictures/main.png",
   images: [
+    "https://raw.githubusercontent.com/rashidabbasi14/PROJECT-menu/refs/heads/main/readme/project-pictures/main.png",
     "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80",
     "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80"
   ],
