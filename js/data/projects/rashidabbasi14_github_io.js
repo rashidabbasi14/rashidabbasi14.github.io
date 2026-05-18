@@ -12,13 +12,13 @@ window.rashidabbasi14_github_io = {
       <li><strong>Static Edge Deployment:</strong> Built to compile into lightweight, distribution-ready assets designed for optimal performance on GitHub Pages networks.</li>
     </ul>
   `,
-  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/main.png",
+  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/main.png",
   images: [
-    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/main.png",
-    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/employments.png",
-    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/projects.png",
-    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/project.png",
-    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/master/readme/project-pictures/projects-and-certifications.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/main.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/employments.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/projects.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/project.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/rashidabbasi14.github.io/refs/heads/main/readme/project-pictures/projects-and-certifications.png",
   ],
   technologies: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS", "GitHub Pages", "JSON Binding"],
   projectLink: "https://github.com/rashidabbasi14/rashidabbasi14.github.io",
