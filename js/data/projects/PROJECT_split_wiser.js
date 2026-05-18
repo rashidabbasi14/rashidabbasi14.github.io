@@ -1,6 +1,6 @@
 window.PROJECT_split_wiser = {
   id: "PROJECT_split_wiser",
-  title: "Project SplitWiser",
+  title: "SplitWiser",
   subtitle: "Smart Group Expense Splitter & Debt Simplification Engine",
   description: "A full-stack financial utility designed to track shared group expenses, manage live balances, and calculate optimized transaction webs to minimize the total number of payments required to settle group debts.",
   longDescription: `
