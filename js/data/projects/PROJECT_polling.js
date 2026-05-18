@@ -1,6 +1,6 @@
 window.PROJECT_polling = {
   id: "PROJECT_polling",
-  title: "Project Polling & Voting App",
+  title: "Polling & Voting App",
   subtitle: "Secure Real-Time Opinion Gathering Engine",
   description: "A fast web-based polling mechanism using expressive backend routing to handle authenticated concurrent user voting. Focuses on absolute data accuracy, race condition prevention, and instant result charting.",
   longDescription: `

@@ -1,6 +1,6 @@
 window.CN_codeninja_hub = {
   id: "CN_codeninja_hub",
-  title: "CodeNinja Internal Hub Platform",
+  title: "Internal Hub Event Platform",
   subtitle: "Centralized Enterprise Operations & Team Management Portal",
   description: "An internal corporate hub built to streamline engineering workflows, manage resource allocations, track organizational metrics, and integrate company-wide productivity modules under a single secure gateway.",
   longDescription: `

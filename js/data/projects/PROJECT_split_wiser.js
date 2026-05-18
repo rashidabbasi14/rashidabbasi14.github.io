@@ -13,10 +13,10 @@ window.PROJECT_split_wiser = {
       <li><strong>Activity Stream & Notifications:</strong> Provides a chronological feed detailing who added, edited, or deleted specific line items to maintain group transparency.</li>
     </ul>
   `,
-  coverImage: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
+  coverImage: "https://raw.githubusercontent.com/rashidabbasi14/PROJECT-split-wiser/refs/heads/main/readme/project-pictures/main.png",
   images: [
-    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
     "https://raw.githubusercontent.com/rashidabbasi14/PROJECT-split-wiser/refs/heads/main/readme/project-pictures/main.png",
+    "https://raw.githubusercontent.com/rashidabbasi14/PROJECT-split-wiser/refs/heads/main/readme/project-pictures/manual-entry.png",
   ],
   technologies: ["PHP", "Laravel", "MySQL", "JavaScript", "Blade Engine", "Debt Simplification Math"],
   projectLink: "https://github.com/rashidabbasi14/PROJECT-split-wiser",

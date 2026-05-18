@@ -1,6 +1,6 @@
 window.QCEPTS_american_bank_loan = {
   id: "QCEPTS_american_bank_loan",
-  title: "QCEPTS - Bank Loan Processing & Risk Evaluation",
+  title: "Bank Loan Processing & Risk Evaluation",
   subtitle: "Enterprise Loan Lifecycle & Quality Control Management System",
   description: "An automated core credit-scoring and loan origination pipeline designed to manage consumer, commercial, and mortgage loan processing. Implements advanced financial risk modeling, multi-tier underwriting workflows, and real-time validation compliance for retail banking systems.",
   longDescription: `

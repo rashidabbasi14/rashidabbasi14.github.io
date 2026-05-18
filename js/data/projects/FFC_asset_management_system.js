@@ -1,6 +1,6 @@
 window.FFC_asset_management_system = {
   id: "FFC_asset_management_system",
-  title: "FFC Asset Management System",
+  title: "Asset Management System",
   subtitle: "Enterprise Fixed Asset Tracking & Lifecycle Platform",
   description: "A centralized web platform designed to track, audit, and manage organizational fixed assets. Features real-time depreciation calculators, barcode/QR tracking integrations, and streamlined assignment workflows for compliance and financial accountability.",
   longDescription: `

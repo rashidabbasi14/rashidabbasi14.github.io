@@ -1,6 +1,6 @@
 window.CN_jira_techspec_automation = {
   id: "CN_jira_techspec_automation",
-  title: "CN Jira Technical Specification Automation",
+  title: "Jira Tech Document Automation",
   subtitle: "Productivity Bridge Linking Repository Architecture with Jira Workflow Boards",
   description: "An automated engineering utility built to bridge codebase structural plans with enterprise issue trackers. Automatically extracts documentation schemas, functional requirements, or markdown technical specifications into clean, populated Jira issue cards.",
   longDescription: `

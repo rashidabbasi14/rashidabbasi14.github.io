@@ -1,6 +1,6 @@
 window.PROJECT_income_tax_calculator = {
   id: "PROJECT_income_tax_calculator",
-  title: "Pakistan Salary Income Tax Calculator",
+  title: "Salary Income Tax Calculator",
   subtitle: "FBR Regulatory Tax Slab Computation Engine",
   description: "A fast utility tool programmed with the official Federal Board of Revenue (FBR) progressive tax brackets to instantly evaluate monthly and annual salary take-home structures, net deductions, and marginal tax groupings.",
   longDescription: `

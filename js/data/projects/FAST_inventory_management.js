@@ -1,6 +1,6 @@
 window.FAST_inventory_management = {
   id: "FAST_inventory_management",
-  title: "FAST Inventory Management System",
+  title: "Inventory Management System",
   subtitle: "Real-Time Stock & Supply Chain Operations Portal",
   description: "A business operations tool built to manage high-turnover stock, track vendor relationships, and oversee distribution. Employs low-stock alert monitors and automated purchase requisition cycles to prevent logistical bottlenecks.",
   longDescription: `

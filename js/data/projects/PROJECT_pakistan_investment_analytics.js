@@ -1,6 +1,6 @@
 window.PROJECT_pakistan_investment_analytics = {
   id: "PROJECT_pakistan_investment_analytics",
-  title: "Pakistan Investment Analytics Platform",
+  title: "PSX Investment Analytics Platform",
   subtitle: "Macroeconomic Trends & Local Capital Market Visualizer",
   description: "A specialized financial analytics portal designed to track and visualize Pakistan's key macroeconomic indicators, localized market yields, mutual fund performances, and investment vehicles for data-driven wealth management.",
   longDescription: `

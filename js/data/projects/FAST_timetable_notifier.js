@@ -1,6 +1,6 @@
 window.FAST_timetable_notifier = {
   id: "FAST_timetable_notifier",
-  title: "FAST Timetable Notifier",
+  title: "Timetable Notifier",
   subtitle: "Automated Academic Scheduling & Push Notification Service",
   description: "A utility designed to optimize academic coordination by parsing composite university class timetables and pushing dynamic, targeted scheduling alerts to individual student cohorts regarding venue changes or class updates.",
   longDescription: `
