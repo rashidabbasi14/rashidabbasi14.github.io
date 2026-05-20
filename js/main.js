@@ -56,97 +56,48 @@ function setupContactForm(email) {
         const form = document.getElementById("contactForm");
         if (!form) return;
 
+        const accessKey = "de95366b-02c8-474b-9a89-9a9cb1c8ce3e";
+
         // Remove any existing hidden inputs to avoid duplicates
         form.querySelectorAll("input[type='hidden']").forEach(el => el.remove());
 
-        // Use FormSubmit.co with a hidden iframe target to avoid page navigation
-        const iframe = document.createElement("iframe");
-        iframe.name = "formsubmit-iframe";
-        iframe.style.display = "none";
-        iframe.id = "formsubmit-iframe";
-        document.body.appendChild(iframe);
-
-        form.action = `https://formsubmit.co/${email}`;
-        form.method = "POST";
-        form.target = "formsubmit-iframe";
-        form.setAttribute("data-email", email);
-
-        const redirectInput = document.createElement("input");
-        redirectInput.type = "hidden";
-        redirectInput.name = "_next";
-        redirectInput.value = window.location.href;
-        form.appendChild(redirectInput);
-
-        const honeypot = document.createElement("input");
-        honeypot.type = "hidden";
-        honeypot.name = "_honey";
-        honeypot.value = "";
-        form.appendChild(honeypot);
+        // Add Web3Forms access key
+        const accessKeyInput = document.createElement("input");
+        accessKeyInput.type = "hidden";
+        accessKeyInput.name = "access_key";
+        accessKeyInput.value = accessKey;
+        form.appendChild(accessKeyInput);
 
         // Remove old listener by cloning (to avoid duplicate listeners on re-init)
         const newForm = form.cloneNode(true);
         form.parentNode.replaceChild(newForm, form);
 
-        newForm.addEventListener("submit", (e) => {
+        newForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
             const messageDiv = document.getElementById("formMessage");
             const submitBtn = newForm.querySelector("button[type=\"submit\"]");
             const originalBtnText = submitBtn.innerHTML;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2 mt-2"></i>Sending...';
 
-            messageDiv.className = "alert alert-info";
+            messageDiv.className = "alert alert-info mt-2";
             messageDiv.textContent = "Sending your message...";
             messageDiv.style.display = "block";
 
-            // Listen for iframe load to detect form submission completion
-            const iframe = document.getElementById("formsubmit-iframe");
-            if (iframe) {
-                iframe.onload = () => {
-                    try {
-                        // Check if redirected back to our page (success)
-                        const iframeUrl = iframe.contentWindow?.location?.href || "";
-                        if (iframeUrl && iframeUrl.includes(window.location.origin)) {
-                            messageDiv.className = "alert alert-success";
-                            messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
-                            newForm.reset();
+            try {
+                const formData = new FormData(newForm);
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                });
 
-                            const modalEl = document.getElementById("contactModal");
-                            if (modalEl) {
-                                const modal = bootstrap.Modal.getInstance(modalEl);
-                                if (modal) {
-                                    setTimeout(() => modal.hide(), 1500);
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        // Cross-origin iframe restrictions - assume success if we can't read it
-                        messageDiv.className = "alert alert-success";
-                        messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
-                        newForm.reset();
+                const result = await response.json();
 
-                        const modalEl = document.getElementById("contactModal");
-                        if (modalEl) {
-                            const modal = bootstrap.Modal.getInstance(modalEl);
-                            if (modal) {
-                                setTimeout(() => modal.hide(), 1500);
-                            }
-                        }
-                    } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    }
-                };
-            }
-
-            // Fallback timeout in case iframe onload doesn't fire
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    messageDiv.className = "alert alert-success";
+                if (result.success) {
+                    messageDiv.className = "alert alert-success mt-2";
                     messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
                     newForm.reset();
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnText;
 
                     const modalEl = document.getElementById("contactModal");
                     if (modalEl) {
@@ -155,8 +106,17 @@ function setupContactForm(email) {
                             setTimeout(() => modal.hide(), 1500);
                         }
                     }
+                } else {
+                    throw new Error(result.message || "Failed to send message");
                 }
-            }, 5000);
+            } catch (err) {
+                messageDiv.className = "alert alert-danger mt-2";
+                messageDiv.textContent = "Failed to send message. Please try again or email me directly at " + email;
+                console.warn("Web3Forms error:", err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
         });
     } catch (e) {
         console.warn("setupContactForm error", e);
