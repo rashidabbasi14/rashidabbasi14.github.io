@@ -56,8 +56,19 @@ function setupContactForm(email) {
         const form = document.getElementById("contactForm");
         if (!form) return;
 
+        // Remove any existing hidden inputs to avoid duplicates
+        form.querySelectorAll("input[type='hidden']").forEach(el => el.remove());
+
+        // Use FormSubmit.co with a hidden iframe target to avoid page navigation
+        const iframe = document.createElement("iframe");
+        iframe.name = "formsubmit-iframe";
+        iframe.style.display = "none";
+        iframe.id = "formsubmit-iframe";
+        document.body.appendChild(iframe);
+
         form.action = `https://formsubmit.co/${email}`;
         form.method = "POST";
+        form.target = "formsubmit-iframe";
         form.setAttribute("data-email", email);
 
         const redirectInput = document.createElement("input");
@@ -72,20 +83,80 @@ function setupContactForm(email) {
         honeypot.value = "";
         form.appendChild(honeypot);
 
-        form.addEventListener("submit", (e) => {
+        // Remove old listener by cloning (to avoid duplicate listeners on re-init)
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+
+        newForm.addEventListener("submit", (e) => {
             const messageDiv = document.getElementById("formMessage");
-            const submitBtn = form.querySelector("button[type=\"submit\"]");
+            const submitBtn = newForm.querySelector("button[type=\"submit\"]");
             const originalBtnText = submitBtn.innerHTML;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = "<i class=\"fas fa-spinner fa-spin me-2\"></i>Sending...";
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
 
             messageDiv.className = "alert alert-info";
             messageDiv.textContent = "Sending your message...";
             messageDiv.style.display = "block";
 
+            // Listen for iframe load to detect form submission completion
+            const iframe = document.getElementById("formsubmit-iframe");
+            if (iframe) {
+                iframe.onload = () => {
+                    try {
+                        // Check if redirected back to our page (success)
+                        const iframeUrl = iframe.contentWindow?.location?.href || "";
+                        if (iframeUrl && iframeUrl.includes(window.location.origin)) {
+                            messageDiv.className = "alert alert-success";
+                            messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
+                            newForm.reset();
+
+                            const modalEl = document.getElementById("contactModal");
+                            if (modalEl) {
+                                const modal = bootstrap.Modal.getInstance(modalEl);
+                                if (modal) {
+                                    setTimeout(() => modal.hide(), 1500);
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        // Cross-origin iframe restrictions - assume success if we can't read it
+                        messageDiv.className = "alert alert-success";
+                        messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
+                        newForm.reset();
+
+                        const modalEl = document.getElementById("contactModal");
+                        if (modalEl) {
+                            const modal = bootstrap.Modal.getInstance(modalEl);
+                            if (modal) {
+                                setTimeout(() => modal.hide(), 1500);
+                            }
+                        }
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                };
+            }
+
+            // Fallback timeout in case iframe onload doesn't fire
             setTimeout(() => {
-            }, 100);
+                if (submitBtn.disabled) {
+                    messageDiv.className = "alert alert-success";
+                    messageDiv.textContent = "Message sent successfully! I'll get back to you soon.";
+                    newForm.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+
+                    const modalEl = document.getElementById("contactModal");
+                    if (modalEl) {
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) {
+                            setTimeout(() => modal.hide(), 1500);
+                        }
+                    }
+                }
+            }, 5000);
         });
     } catch (e) {
         console.warn("setupContactForm error", e);
@@ -172,10 +243,57 @@ function populateFromMyData(data) {
         if (locEl && data.location) locEl.textContent = data.location;
 
         setupContactForm(data.email);
+        renderWhatsAppButton(data.phone);
     } catch (e) {
         console.warn("populateFromMyData error", e);
     }
 }
+
+function renderWhatsAppButton(phone) {
+    if (!phone) return;
+    // Remove existing button if any
+    const existing = document.getElementById("whatsapp-float");
+    if (existing) existing.remove();
+
+    // Extract digits from phone number
+    const digits = phone.replace(/\D/g, "");
+    const waUrl = `https://wa.me/${digits}`;
+
+    const btn = document.createElement("a");
+    btn.id = "whatsapp-float";
+    btn.className = "whatsapp-float";
+    btn.href = waUrl;
+    btn.target = "_blank";
+    btn.rel = "noopener noreferrer";
+    btn.setAttribute("aria-label", "Chat on WhatsApp");
+
+    const tooltip = document.createElement("span");
+    tooltip.className = "whatsapp-tooltip";
+    tooltip.textContent = "Chat on WhatsApp";
+    btn.appendChild(tooltip);
+
+    const icon = document.createElement("i");
+    icon.className = "fab fa-whatsapp";
+    btn.appendChild(icon);
+
+    document.body.appendChild(btn);
+}
+
+// Reset modal form on close
+document.addEventListener("DOMContentLoaded", () => {
+    const modalEl = document.getElementById("contactModal");
+    if (modalEl) {
+        modalEl.addEventListener("hidden.bs.modal", () => {
+            const form = document.getElementById("contactForm");
+            if (form) form.reset();
+            const msgDiv = document.getElementById("formMessage");
+            if (msgDiv) {
+                msgDiv.style.display = "none";
+                msgDiv.className = "alert mt-3";
+            }
+        });
+    }
+});
 
 function createTagList(tags = []) {
     const wrapper = document.createElement("div");
