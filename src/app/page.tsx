@@ -44,7 +44,7 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
             <Image
-              src="/uploads/logo.png"
+              src="/uploads/logo.webp"
               alt={siteName}
               width={40}
               height={40}
@@ -102,7 +102,7 @@ export default async function LandingPage() {
         className="relative overflow-hidden"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.jpg')",
+            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -391,7 +391,7 @@ export default async function LandingPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
               <Image
-                src="/uploads/logo.png"
+                src="/uploads/logo.webp"
                 alt={siteName}
                 width={28}
                 height={28}

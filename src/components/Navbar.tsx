@@ -91,7 +91,7 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
             {/* Logo — always visible, links to landing page */}
             <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
               <Image
-                src="/uploads/logo.png"
+                src="/uploads/logo.webp"
                 alt={`${siteName} logo`}
                 width={36}
                 height={36}

@@ -152,7 +152,7 @@ export default function HomeClient({ userId, username }: { userId?: string; user
         className="py-5 flex items-center min-h-[60vh]"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.jpg')",
+            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

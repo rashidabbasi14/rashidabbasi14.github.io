@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="public/uploads/logo.png" alt="PortfolioBuilder Logo" width="80" height="80" />
+  <img src="public/uploads/logo.webp" alt="PortfolioBuilder Logo" width="80" height="80" />
 </p>
 
 <h1 align="center">PortfolioBuilder</h1>
