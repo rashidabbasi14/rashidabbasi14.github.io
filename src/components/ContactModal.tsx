@@ -40,16 +40,16 @@ export default function ContactModal({ isOpen, onClose, email }: ContactModalPro
     setStatus({ type: "info", message: "Sending your message..." });
 
     try {
-      const formData = new FormData();
-      formData.append("access_key", "de95366b-02c8-474b-9a89-9a9cb1c8ce3e");
-      formData.append("name", formState.name);
-      formData.append("email", formState.email);
-      formData.append("subject", formState.subject);
-      formData.append("message", formState.message);
-
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: email,
+          name: formState.name,
+          email: formState.email,
+          subject: formState.subject,
+          message: formState.message,
+        }),
       });
 
       const result = await response.json();
