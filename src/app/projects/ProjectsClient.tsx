@@ -116,8 +116,9 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-screen">
+      <div className="flex-1 flex items-center justify-center min-h-screen" role="status" aria-label="Loading projects">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: "#47b8ff" }} />
+        <span className="sr-only">Loading projects...</span>
       </div>
     );
   }
@@ -126,7 +127,7 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
     <>
 
       <main className="flex-1">
-        <section className="py-8">
+        <section className="py-8" aria-label="Projects listing">
           <div className="container mx-auto px-4">
             {/* Page Header */}
             <div
@@ -137,7 +138,7 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
               }}
             >
               <h1 className="text-3xl md:text-4xl font-bold" style={{ color: "#f8fbff" }}>Projects</h1>
-              <p className="mt-2" style={{ color: "#b0c4de" }}>
+              <p className="mt-2" style={{ color: "#c8d6e5" }}>
                 {filteredProjects.length} {filteredProjects.length === 1 ? "project" : "projects"}
                 {selectedTags.size > 0 && ` filtered by ${selectedTags.size} tag${selectedTags.size > 1 ? "s" : ""}`}
               </p>
@@ -146,7 +147,9 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
             {/* Search & Filter */}
             <div className="flex gap-2 mb-6">
               <div className="flex-1">
+                <label htmlFor="project-search" className="sr-only">Search projects</label>
                 <input
+                  id="project-search"
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -157,6 +160,7 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
                     border: "1px solid rgba(71,184,255,0.15)",
                     "--tw-ring-color": "rgba(71,184,255,0.3)",
                   } as React.CSSProperties}
+                  autoComplete="off"
                 />
               </div>
               <div className="relative">
@@ -171,12 +175,15 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
                     border: "1px solid rgba(71,184,255,0.3)",
                     color: "#47b8ff",
                   }}
+                  aria-expanded={false}
+                  aria-controls="filterDropdown"
+                  aria-label="Filter projects by technology"
                 >
-                  <svg className="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
                   Filters {selectedTags.size > 0 && `(${selectedTags.size})`}
-                  <svg className="inline-block w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="inline-block w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                   </svg>
                 </button>
@@ -189,9 +196,13 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
                     background: "linear-gradient(180deg, rgba(16,31,60,0.98), rgba(8,17,30,0.98))",
                     border: "1px solid rgba(71,184,255,0.2)",
                   }}
+                  role="dialog"
+                  aria-label="Filter by technology"
                 >
                   <div className="p-3">
+                    <label htmlFor="tag-search" className="sr-only">Search technologies</label>
                     <input
+                      id="tag-search"
                       type="text"
                       value={tagSearch}
                       onChange={(e) => setTagSearch(e.target.value)}
@@ -201,12 +212,13 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
                         backgroundColor: "rgba(11,35,65,0.6)",
                         border: "1px solid rgba(71,184,255,0.15)",
                       }}
+                      autoComplete="off"
                     />
-                    <div className="max-h-48 overflow-y-auto space-y-1">
+                    <div className="max-h-48 overflow-y-auto space-y-1" role="group" aria-label="Technology filters">
                       {filteredTechnologies.map((tech) => (
                         <label
                           key={tech}
-                          className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-white/5 text-sm text-white/80"
+                          className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-white/5 text-sm text-[#c8d6e5]"
                         >
                           <input
                             type="checkbox"
@@ -227,19 +239,22 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Projects">
               {filteredProjects.map((project) => (
                 <Link
                   key={project.id}
                   href={`/${username ? username + "/" : ""}project/${project.id}`}
                   className="portfolio-card flex flex-col text-decoration-none text-reset"
+                  role="listitem"
+                  aria-label={`View project: ${project.title}`}
                 >
                   {project.coverImage && (
                     <div className="relative overflow-hidden">
                       <img
                         src={project.coverImage}
-                        alt={project.title}
+                        alt={`${project.title} cover image`}
                         className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
                       />
                       {project.priority && (
                         <span
@@ -254,10 +269,10 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
                   <div className="p-5 flex flex-col flex-1">
                     <h3 className="text-white font-semibold text-base mb-1">{project.title}</h3>
                     {project.subtitle && (
-                      <p className="text-white/60 text-sm mb-2">{project.subtitle}</p>
+                      <p className="text-[#c8d6e5] text-sm mb-2">{project.subtitle}</p>
                     )}
                     {project.description && (
-                      <p className="text-white/60 text-sm flex-1 line-clamp-3" dangerouslySetInnerHTML={{ __html: project.description }} />
+                      <p className="text-[#c8d6e5] text-sm flex-1 line-clamp-3" dangerouslySetInnerHTML={{ __html: project.description }} />
                     )}
                     {project.technologies && project.technologies.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mt-4 pt-3" style={{ borderTop: "1px solid rgba(71,184,255,0.1)" }}>
@@ -277,8 +292,8 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
             </div>
 
             {filteredProjects.length === 0 && (
-              <div className="text-center py-16">
-                <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#47b8ff" }}>
+              <div className="text-center py-16" role="status">
+                <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#47b8ff" }} aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <p className="text-white/50 text-lg">No projects found matching your criteria.</p>

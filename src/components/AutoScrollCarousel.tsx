@@ -21,9 +21,19 @@ export default function AutoScrollCarousel({
 }: AutoScrollCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const animationRef = useRef<number | null>(null);
   const scrollPosRef = useRef(0);
   const lastTimeRef = useRef(0);
+
+  // Check for prefers-reduced-motion
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // Duplicate children for seamless loop
   const duplicatedItems = [...children, ...children, ...children];
@@ -34,7 +44,7 @@ export default function AutoScrollCarousel({
       const delta = timestamp - lastTimeRef.current;
       lastTimeRef.current = timestamp;
 
-      if (!isPaused && trackRef.current) {
+      if (!isPaused && !prefersReducedMotion && trackRef.current) {
         scrollPosRef.current += (speed * delta) / 1000;
 
         // Single item width = total width of one set of children
@@ -48,7 +58,7 @@ export default function AutoScrollCarousel({
 
       animationRef.current = requestAnimationFrame(animate);
     },
-    [isPaused, speed]
+    [isPaused, speed, prefersReducedMotion]
   );
 
   useEffect(() => {
@@ -59,8 +69,16 @@ export default function AutoScrollCarousel({
     };
   }, [animate]);
 
+  const handleFocusIn = () => {
+    if (pauseOnHover) setIsPaused(true);
+  };
+
+  const handleFocusOut = () => {
+    if (pauseOnHover) setIsPaused(false);
+  };
+
   return (
-    <section className="py-5">
+    <section className="py-5" aria-label={title || "Scrolling content carousel"} role="region">
       <div className="container mx-auto px-4 mb-4">
         <div className="flex items-center justify-between">
           {title && <h2 className="section-heading mb-0">{title}</h2>}
@@ -88,18 +106,23 @@ export default function AutoScrollCarousel({
           onMouseLeave={() => pauseOnHover && setIsPaused(false)}
           onTouchStart={() => pauseOnHover && setIsPaused(true)}
           onTouchEnd={() => pauseOnHover && setIsPaused(false)}
+          onFocus={handleFocusIn}
+          onBlur={handleFocusOut}
         >
           {/* Scrolling track */}
           <div
             ref={trackRef}
             className="flex gap-6"
-            style={{ willChange: "transform" }}
+            style={{ willChange: prefersReducedMotion ? "auto" : "transform" }}
+            role="list"
+            aria-label={title ? `${title} items` : "Carousel items"}
           >
             {duplicatedItems.map((child, index) => (
               <div
                 key={index}
                 className="flex-shrink-0 w-[85vw] sm:w-[45vw] lg:w-[30vw]"
                 style={{ maxWidth: "400px" }}
+                role="listitem"
               >
                 <div className="h-full">
                   {child}
@@ -112,7 +135,7 @@ export default function AutoScrollCarousel({
 
       {/* Pause indicator */}
       {isPaused && (
-        <div className="flex justify-center mt-3">
+        <div className="flex justify-center mt-3" aria-live="polite" aria-atomic="true">
           <span
             className="text-xs px-3 py-1 rounded-full transition-opacity duration-300"
             style={{

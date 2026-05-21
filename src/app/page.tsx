@@ -30,19 +30,26 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#0e1726" }}>
+      {/* ─── Skip to content (accessibility) ──────────────────────── */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
       {/* ─── Navigation ─────────────────────────────────────────────── */}
       <nav
         className="sticky top-0 z-50 shadow-sm"
         style={{ backgroundColor: "#0b2341" }}
+        aria-label="Main navigation"
       >
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
             <Image
               src="/uploads/logo.png"
               alt={siteName}
               width={40}
               height={40}
               className="w-9 h-9 md:w-10 md:h-10 object-contain"
+              priority
             />
           </Link>
           <div className="flex items-center gap-3">
@@ -91,6 +98,7 @@ export default async function LandingPage() {
 
       {/* ─── Hero Section ──────────────────────────────────────────── */}
       <section
+        id="main-content"
         className="relative overflow-hidden"
         style={{
           backgroundImage:
@@ -99,6 +107,7 @@ export default async function LandingPage() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
+        aria-label="Hero section"
       >
         {/* Background decoration */}
         <div
@@ -107,6 +116,7 @@ export default async function LandingPage() {
             background:
               "radial-gradient(ellipse at center, rgba(71,184,255,0.4) 0%, transparent 70%)",
           }}
+          aria-hidden="true"
         />
         <div className="container mx-auto px-4 py-28 md:py-36 text-center relative">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight" style={{ color: "#f8fbff" }}>
@@ -122,7 +132,7 @@ export default async function LandingPage() {
             </span>{" "}
             in Minutes
           </h1>
-          <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto" style={{ color: "#b0c4de" }}>
+          <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto" style={{ color: "#c8d6e5" }}>
             Showcase your skills, projects, and experience with a stunning,
             personalized portfolio website. No coding required.
           </p>
@@ -158,7 +168,7 @@ export default async function LandingPage() {
       </section>
 
       {/* ─── Stats Bar ─────────────────────────────────────────────── */}
-      <section className="container mx-auto px-4 py-12">
+      <section className="container mx-auto px-4 py-12" aria-label="Platform statistics">
         <div
           className="rounded-2xl p-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center"
           style={{
@@ -171,7 +181,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
               {stats.totalUsers}
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               Total Portfolios
             </div>
           </div>
@@ -179,7 +189,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#22c55e" }}>
               {stats.totalPublic}
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               Public
             </div>
           </div>
@@ -187,7 +197,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#f59e0b" }}>
               {stats.totalPrivate}
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               Private
             </div>
           </div>
@@ -195,7 +205,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
               {stats.totalSkills}+
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               Technologies Supported
             </div>
           </div>
@@ -203,7 +213,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
               {stats.totalProjects}+
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               Projects Showcased
             </div>
           </div>
@@ -211,7 +221,7 @@ export default async function LandingPage() {
             <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
               Free
             </div>
-            <div className="text-sm" style={{ color: "#b0c4de" }}>
+            <div className="text-sm" style={{ color: "#c8d6e5" }}>
               To Get Started
             </div>
           </div>
@@ -245,12 +255,12 @@ export default async function LandingPage() {
       )}
 
       {/* ─── Features Section ──────────────────────────────────────── */}
-      <section id="features" className="container mx-auto px-4 py-20">
+      <section id="features" className="container mx-auto px-4 py-20" aria-label="Features">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#f8fbff" }}>
             Everything You Need
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#b0c4de" }}>
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#c8d6e5" }}>
             All the tools to create a professional portfolio that stands out.
           </p>
         </div>
@@ -268,13 +278,14 @@ export default async function LandingPage() {
               <div
                 className="text-3xl mb-5 w-14 h-14 flex items-center justify-center rounded-xl"
                 style={{ backgroundColor: "rgba(71, 184, 255, 0.1)" }}
+                aria-hidden="true"
               >
                 {feature.icon}
               </div>
               <h3 className="text-xl font-semibold mb-3" style={{ color: "#f8fbff" }}>
                 {feature.title}
               </h3>
-              <p className="leading-relaxed" style={{ color: "#b0c4de" }}>
+              <p className="leading-relaxed" style={{ color: "#c8d6e5" }}>
                 {feature.description}
               </p>
             </div>
@@ -283,12 +294,12 @@ export default async function LandingPage() {
       </section>
 
       {/* ─── How It Works ──────────────────────────────────────────── */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20" aria-label="How it works">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#f8fbff" }}>
             How It Works
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#b0c4de" }}>
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#c8d6e5" }}>
             Get your portfolio live in four simple steps.
           </p>
         </div>
@@ -297,6 +308,7 @@ export default async function LandingPage() {
           <div
             className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
             style={{ backgroundColor: "rgba(71, 184, 255, 0.2)" }}
+            aria-hidden="true"
           />
           {steps.map((step, i) => (
             <div key={i} className="text-center relative">
@@ -307,13 +319,14 @@ export default async function LandingPage() {
                   color: "#47b8ff",
                   border: "1px solid rgba(71, 184, 255, 0.2)",
                 }}
+                aria-hidden="true"
               >
                 {i + 1}
               </div>
               <h3 className="text-lg font-semibold mb-2" style={{ color: "#f8fbff" }}>
                 {step.title}
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "#b0c4de" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#c8d6e5" }}>
                 {step.description}
               </p>
             </div>
@@ -322,7 +335,7 @@ export default async function LandingPage() {
       </section>
 
       {/* ─── CTA Section ───────────────────────────────────────────── */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20" aria-label="Call to action">
         <div
           className="relative overflow-hidden rounded-2xl p-12 md:p-16 text-center"
           style={{
@@ -338,12 +351,13 @@ export default async function LandingPage() {
               background:
                 "radial-gradient(circle, rgba(71,184,255,0.6) 0%, transparent 70%)",
             }}
+            aria-hidden="true"
           />
           <div className="relative">
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#f8fbff" }}>
               Ready to Showcase Your Work?
             </h2>
-            <p className="text-lg mb-8 max-w-xl mx-auto" style={{ color: "#b0c4de" }}>
+            <p className="text-lg mb-8 max-w-xl mx-auto" style={{ color: "#c8d6e5" }}>
               Join thousands of professionals who trust {siteName} to build
               their online presence.
             </p>
@@ -356,7 +370,7 @@ export default async function LandingPage() {
               }}
             >
               {isSignedIn ? "Go to Dashboard" : "Get Started Free"}
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
@@ -370,12 +384,12 @@ export default async function LandingPage() {
         style={{
           backgroundColor: "#0b2341",
           borderTop: "1px solid rgba(255,255,255,0.12)",
-          color: "#b0c4de",
+          color: "#c8d6e5",
         }}
       >
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <Link href="/" className="flex items-center shrink-0">
+            <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
               <Image
                 src="/uploads/logo.png"
                 alt={siteName}

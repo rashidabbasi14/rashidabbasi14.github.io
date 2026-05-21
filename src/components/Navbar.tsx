@@ -84,35 +84,36 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 shadow-sm" style={{ backgroundColor: "#0b2341" }}>
+    <nav className="sticky top-0 z-50 shadow-sm" style={{ backgroundColor: "#0b2341" }} aria-label="Main navigation">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
             {/* Logo — always visible, links to landing page */}
-            <Link href="/" className="flex items-center shrink-0">
+            <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
               <Image
                 src="/uploads/logo.png"
-                alt={siteName}
+                alt={`${siteName} logo`}
                 width={36}
                 height={36}
                 className="w-8 h-8 md:w-9 md:h-9 object-contain"
+                priority
               />
             </Link>
             {isAdmin && (
               <>
                 <Link
                   href={username ? `/${username}` : "/"}
-                  className="text-white/70 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hidden md:block"
+                  className="text-[#c8d6e5] hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hidden md:block"
                 >
                   View Site
                 </Link>
-                <Link href="/admin" className="text-white/70 hover:text-white text-sm hidden md:block">
+                <Link href="/admin" className="text-[#c8d6e5] hover:text-white text-sm hidden md:block">
                   &larr; Dashboard
                 </Link>
               </>
             )}
             {!isAdmin && (
-              <Link href={basePath || "/"} className="text-white font-bold text-lg tracking-wide">
+              <Link href={basePath || "/"} className="text-white font-bold text-lg tracking-wide" aria-label={`${profileName || siteName} home`}>
                 {profileName || siteName}
               </Link>
             )}
@@ -122,9 +123,11 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-white p-2"
-            aria-label="Toggle navigation"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               {isOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -134,7 +137,7 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
           </button>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1" role="list" aria-label="Navigation links">
             {isAdmin ? (
               <>
                 <NavLink href="/admin/profile">Profile</NavLink>
@@ -155,14 +158,15 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
                 <NavLink href={`${basePath}/#certifications`}>Certifications</NavLink>
                 <button
                   onClick={scrollToContact}
-                  className="text-white/90 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg cursor-pointer"
+                  className="text-[#c8d6e5] hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg cursor-pointer"
+                  aria-label="Contact section"
                 >
                   Contact
                 </button>
                 {isOwner && (
                   <Link
                     href="/admin"
-                    className="text-white/90 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg ml-2"
+                    className="text-[#c8d6e5] hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg ml-2"
                   >
                     Dashboard
                   </Link>
@@ -179,7 +183,7 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
 
         {/* Mobile nav */}
         {isOpen && (
-          <div className="md:hidden pb-4 space-y-1">
+          <div id="mobile-menu" className="md:hidden pb-4 space-y-1" role="list" aria-label="Mobile navigation links">
             {isAdmin ? (
               <>
                 <MobileNavLink href="/admin/profile" onClick={handleMobileLinkClick}>Profile</MobileNavLink>
@@ -201,7 +205,8 @@ export default function Navbar({ isAdmin, username }: NavbarProps) {
                 <MobileNavLink href={`${basePath}/#certifications`} onClick={handleMobileLinkClick}>Certifications</MobileNavLink>
                 <button
                   onClick={() => { setIsOpen(false); scrollToContact(); }}
-                  className="block text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 w-full text-left cursor-pointer"
+                  className="block text-[#c8d6e5] hover:text-white px-4 py-2 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 w-full text-left cursor-pointer"
+                  aria-label="Contact section"
                 >
                   Contact
                 </button>
@@ -226,7 +231,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="text-white/90 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg relative"
+      className="text-[#c8d6e5] hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg relative"
+      role="listitem"
     >
       {children}
     </Link>
@@ -238,7 +244,8 @@ function MobileNavLink({ href, onClick, children }: { href: string; onClick: () 
     <Link
       href={href}
       onClick={onClick}
-      className="block text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10"
+      className="block text-[#c8d6e5] hover:text-white px-4 py-2 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10"
+      role="listitem"
     >
       {children}
     </Link>

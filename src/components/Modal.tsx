@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,9 +27,31 @@ export default function Modal({
   imageWidth = 120,
   imageHeight = 80,
 }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      // Focus trap
+      if (e.key === "Tab" && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
     },
     [onClose]
   );
@@ -79,8 +101,12 @@ export default function Modal({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
       <div
+        ref={modalRef}
         className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl"
         style={{
           backgroundColor: "#0e1726",
@@ -94,12 +120,13 @@ export default function Modal({
             borderBottom: "1px solid rgba(71,184,255,0.1)",
           }}
         >
-          <h2 className="text-white font-semibold text-lg">{title}</h2>
+          <h2 id="modal-title" className="text-white font-semibold text-lg">{title}</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 cursor-pointer"
+            aria-label={`Close ${title} modal`}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -108,7 +135,7 @@ export default function Modal({
         {/* Image at top */}
         {image && (
           <div className="flex justify-center px-6 pt-6 pb-2">
-            <img src={image} alt="Preview" style={imageStyle} />
+            <img src={image} alt={title} style={imageStyle} loading="lazy" />
           </div>
         )}
 

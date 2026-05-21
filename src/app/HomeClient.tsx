@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/Footer";
@@ -130,8 +130,9 @@ export default function HomeClient({ userId, username }: { userId?: string; user
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-screen">
+      <div className="flex-1 flex items-center justify-center min-h-screen" role="status" aria-label="Loading portfolio">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: "#47b8ff" }} />
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -140,8 +141,14 @@ export default function HomeClient({ userId, username }: { userId?: string; user
 
   return (
     <>
+      {/* Skip to content link */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
       {/* Hero Section */}
       <header
+        id="main-content"
         className="py-5 flex items-center min-h-[60vh]"
         style={{
           backgroundImage:
@@ -150,12 +157,13 @@ export default function HomeClient({ userId, username }: { userId?: string; user
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
+        aria-label="Portfolio hero section"
       >
         <div className="container mx-auto px-4 text-center">
           {profile?.image && (
             <Image
               src={profile.image.startsWith("http") ? profile.image : `/${profile.image.replace(/^\/+/, "")}`}
-              alt="Profile Picture"
+              alt={`Portrait of ${profile?.name || "portfolio owner"}`}
               width={170}
               height={170}
               className="rounded-full mx-auto mb-4"
@@ -167,7 +175,7 @@ export default function HomeClient({ userId, username }: { userId?: string; user
             {profile?.tagline || "Full-Stack Software Engineer"}
           </h1>
           <p
-            className="text-lg text-white/80 mx-auto mb-4"
+            className="text-lg text-[#c8d6e5] mx-auto mb-4"
             style={{ maxWidth: "680px" }}
           >
             {profile?.description}
@@ -175,11 +183,11 @@ export default function HomeClient({ userId, username }: { userId?: string; user
 
           {/* Hero Links */}
           {profile?.social && (
-            <div className="flex flex-wrap justify-center gap-2 max-w-[900px] mx-auto">
+            <div className="flex flex-wrap justify-center gap-2 max-w-[900px] mx-auto" role="list" aria-label="Social media links">
               <HeroLink href={profile.social.facebook} icon={<FacebookIcon />} label="Facebook" />
-              <HeroLink href={profile.social.x} icon={<XIcon />} label="" />
+              <HeroLink href={profile.social.x} icon={<XIcon />} label="X (Twitter)" />
               <HeroLink href={profile.social.instagram} icon={<InstagramIcon />} label="Instagram" />
-              <span className="hidden md:block w-px bg-white/40 mx-1" />
+              <span className="hidden md:block w-px bg-white/40 mx-1" aria-hidden="true" />
               <HeroLink href={profile.social.upwork} icon={<UpworkIcon />} label="Upwork" />
               <HeroLink href={profile.social.linkedin} icon={<LinkedInIcon />} label="LinkedIn" />
               <HeroLink href={profile.social.github} icon={<GitHubIcon />} label="GitHub" />
@@ -190,7 +198,7 @@ export default function HomeClient({ userId, username }: { userId?: string; user
           {skillCategories.length > 0 && (
             <div className="mt-6 text-left max-w-4xl mx-auto">
               <div className="flex items-center justify-between mb-3">
-                <h5 className="text-white/90 font-semibold">Skills & Technologies</h5>
+                <h5 className="text-[#e8eef5] font-semibold">Skills & Technologies</h5>
                 {skillCategories.length > 3 && (
                   <button
                     onClick={() => setShowAllSkills(!showAllSkills)}
@@ -202,42 +210,47 @@ export default function HomeClient({ userId, username }: { userId?: string; user
                     }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(71,184,255,0.2)"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(71,184,255,0.1)"; }}
+                    aria-expanded={showAllSkills}
+                    aria-controls="skills-list"
                   >
                     {showAllSkills ? "Show less" : `All Skills (${skillCategories.length})`}
-                    <svg className={`inline-block w-3 h-3 ml-1 transition-transform ${showAllSkills ? "rotate-180" : ""}`} fill="currentColor" viewBox="0 0 24 24">
+                    <svg className={`inline-block w-3 h-3 ml-1 transition-transform ${showAllSkills ? "rotate-180" : ""}`} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                     </svg>
                   </button>
                 )}
               </div>
-              {(showAllSkills ? skillCategories : skillCategories.slice(0, 3)).map((cat) => (
-                <div key={cat.id} className="skill-section">
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
-                    <h6 className="text-white font-bold text-sm md:w-[120px] flex-shrink-0">{cat.name}</h6>
-                    <div className="flex flex-wrap gap-3">
-                      {cat.items.map((skill) => (
-                        <div key={skill.id} className="flex flex-col items-center" style={{ minWidth: "50px", maxWidth: "65px" }}>
-                          <img
-                            src={skill.image}
-                            alt={skill.name}
-                            className="w-[45px] h-[45px] object-cover rounded-full"
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              target.style.display = "none";
-                              const fallback = document.createElement("div");
-                              fallback.className = "flex items-center justify-center rounded-full text-xs font-bold";
-                              fallback.style.cssText = "width:45px;height:45px;background:rgba(71,184,255,0.2);color:#47b8ff;";
-                              fallback.textContent = skill.name.substring(0, 2).toUpperCase();
-                              target.parentElement?.insertBefore(fallback, target);
-                            }}
-                          />
-                          <span className="text-[11px] text-white/80 mt-1 text-center leading-tight">{skill.name}</span>
-                        </div>
-                      ))}
+              <div id="skills-list">
+                {(showAllSkills ? skillCategories : skillCategories.slice(0, 3)).map((cat) => (
+                  <div key={cat.id} className="skill-section">
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
+                      <h6 className="text-white font-bold text-sm md:w-[120px] flex-shrink-0">{cat.name}</h6>
+                      <div className="flex flex-wrap gap-3">
+                        {cat.items.map((skill) => (
+                          <div key={skill.id} className="flex flex-col items-center" style={{ minWidth: "50px", maxWidth: "65px" }}>
+                            <img
+                              src={skill.image}
+                              alt={skill.name}
+                              className="w-[45px] h-[45px] object-cover rounded-full"
+                              loading="lazy"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.style.display = "none";
+                                const fallback = document.createElement("div");
+                                fallback.className = "flex items-center justify-center rounded-full text-xs font-bold";
+                                fallback.style.cssText = "width:45px;height:45px;background:rgba(71,184,255,0.2);color:#47b8ff;";
+                                fallback.textContent = skill.name.substring(0, 2).toUpperCase();
+                                target.parentElement?.insertBefore(fallback, target);
+                              }}
+                            />
+                            <span className="text-[11px] text-[#c8d6e5] mt-1 text-center leading-tight">{skill.name}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -245,13 +258,13 @@ export default function HomeClient({ userId, username }: { userId?: string; user
 
       <main>
         {/* About & Education */}
-        <section className="py-5">
+        <section className="py-5" aria-label="About and education">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-2">
                 <h2 className="section-heading">About Me</h2>
                 <div className="portfolio-card p-6">
-                  <div dangerouslySetInnerHTML={{ __html: profile?.aboutMe || "" }} />
+                  <div className="text-[#c8d6e5] leading-relaxed" dangerouslySetInnerHTML={{ __html: profile?.aboutMe || "" }} />
                 </div>
               </div>
               <div>
@@ -261,7 +274,7 @@ export default function HomeClient({ userId, username }: { userId?: string; user
                     <div key={edu.id} className={i > 0 ? "timeline-item mt-3 pt-3 border-t border-white/10" : "timeline-item"}>
                       <div className="timeline-date">Graduated {edu.year}</div>
                       <strong className="text-white">{edu.degree}</strong>
-                      <p className="text-white/80 text-sm mb-0">{edu.institution}</p>
+                      <p className="text-[#c8d6e5] text-sm mb-0">{edu.institution}</p>
                     </div>
                   ))}
                 </div>
@@ -271,7 +284,7 @@ export default function HomeClient({ userId, username }: { userId?: string; user
         </section>
 
         {/* Employment */}
-        <section id="employment" className="py-5">
+        <section id="employment" className="py-5" aria-label="Employment history">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="section-heading mb-0">Employment History</h2>
@@ -286,20 +299,24 @@ export default function HomeClient({ userId, username }: { userId?: string; user
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(71,184,255,0.2)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(71,184,255,0.1)"; }}
+                  aria-expanded={showAllEmployment}
+                  aria-controls="employment-list"
                 >
                   {showAllEmployment ? "Hide roles" : "All roles"}
                 </button>
               )}
             </div>
 
-            {employment.length > 0 && (
-              <>
-                <EmploymentCard item={employment[0]} size={72} />
-                {showAllEmployment && employment.slice(1).map((item) => (
-                  <EmploymentCard key={item.id} item={item} size={56} />
-                ))}
-              </>
-            )}
+            <div id="employment-list">
+              {employment.length > 0 && (
+                <>
+                  <EmploymentCard item={employment[0]} size={72} />
+                  {showAllEmployment && employment.slice(1).map((item) => (
+                    <EmploymentCard key={item.id} item={item} size={56} />
+                  ))}
+                </>
+              )}
+            </div>
           </div>
         </section>
 
@@ -326,10 +343,10 @@ export default function HomeClient({ userId, username }: { userId?: string; user
         </AutoScrollCarousel>
 
         {/* Contact Section */}
-        <section id="contact" className="py-5">
+        <section id="contact" className="py-5" aria-label="Contact">
           <div className="container mx-auto px-4 text-center">
             <h2 className="section-heading">Schedule a Quick Meeting and Get a FREE Quote!</h2>
-            <p className="text-white/70 mb-6 max-w-xl mx-auto">
+            <p className="text-[#c8d6e5] mb-6 max-w-xl mx-auto">
               Have a project in mind or just want to say hello? Feel free to reach out!
             </p>
             <button
@@ -342,9 +359,10 @@ export default function HomeClient({ userId, username }: { userId?: string; user
               }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(71,184,255,0.1)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+              aria-label="Send a message via contact form"
             >
               <span className="flex items-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                 </svg>
                 Send a Message
@@ -395,9 +413,11 @@ function HeroLink({ href, icon, label }: { href?: string; icon: React.ReactNode;
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-2 min-w-[110px] px-3 py-1.5 text-sm rounded-lg text-white/90 border border-white/40 hover:bg-white/10 transition-all duration-200"
+      className="inline-flex items-center justify-center gap-2 min-w-[110px] px-3 py-1.5 text-sm rounded-lg text-[#c8d6e5] border border-white/40 hover:bg-white/10 transition-all duration-200"
+      aria-label={`Visit ${label || "social profile"}`}
+      role="listitem"
     >
-      <span className="w-4 h-4 shrink-0">{icon}</span>
+      <span className="w-4 h-4 shrink-0" aria-hidden="true">{icon}</span>
       {label && <span>{label}</span>}
     </a>
   );
@@ -408,14 +428,15 @@ function EmploymentCard({ item, size }: { item: Employment; size: number }) {
     text.split(/\s+/).map((w) => w[0] || "").join("").slice(0, 2).toUpperCase();
 
   return (
-    <div className="portfolio-card p-4 mb-3">
+    <div className="portfolio-card p-4 mb-3" role="article" aria-label={`${item.title} at ${item.company}`}>
       <div className="flex items-start gap-3">
         {item.image ? (
           <img
             src={item.image}
-            alt={item.company}
+            alt={`${item.company} logo`}
             className="rounded-full object-cover flex-shrink-0"
             style={{ width: size, height: size }}
+            loading="lazy"
           />
         ) : (
           <div
@@ -426,17 +447,18 @@ function EmploymentCard({ item, size }: { item: Employment; size: number }) {
               backgroundColor: "#0d6efd",
               fontSize: Math.max(14, Math.floor(size / 3)),
             }}
+            aria-hidden="true"
           >
             {getInitials(item.company)}
           </div>
         )}
         <div className="flex-1 min-w-0">
           <h3 className="text-white font-semibold text-sm">{item.title}</h3>
-          <p className="text-white/70 text-xs">
+          <p className="text-[#c8d6e5] text-xs">
             {item.company}{item.duration ? ` | ${item.duration}` : ""}
           </p>
           {item.description && (
-            <p className="text-white/70 text-xs mt-2">{item.description}</p>
+            <p className="text-[#c8d6e5] text-xs mt-2">{item.description}</p>
           )}
         </div>
       </div>
@@ -447,21 +469,22 @@ function EmploymentCard({ item, size }: { item: Employment; size: number }) {
 function ProjectCard({ project, username }: { project: Project; username?: string }) {
   const basePath = username ? `/${username}` : "";
   return (
-    <Link href={`${basePath}/project/${project.id}`} className="portfolio-card flex flex-col text-decoration-none text-reset">
+    <Link href={`${basePath}/project/${project.id}`} className="portfolio-card flex flex-col text-decoration-none text-reset" aria-label={`View project: ${project.title}`}>
       {project.coverImage && (
         <img
           src={project.coverImage}
-          alt={project.title}
+          alt={`${project.title} cover image`}
           className="w-full h-56 object-cover"
+          loading="lazy"
         />
       )}
       <div className="p-4 flex flex-col flex-1">
         <h3 className="text-white font-semibold text-sm mb-1">{project.title}</h3>
         {project.subtitle && (
-          <p className="text-white/70 text-xs mb-2">{project.subtitle}</p>
+          <p className="text-[#c8d6e5] text-xs mb-2">{project.subtitle}</p>
         )}
         {project.description && (
-          <p className="text-white/70 text-xs flex-1" dangerouslySetInnerHTML={{ __html: project.description }} />
+          <p className="text-[#c8d6e5] text-xs flex-1" dangerouslySetInnerHTML={{ __html: project.description }} />
         )}
         {project.technologies && project.technologies.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
@@ -481,14 +504,15 @@ function CertCard({ cert }: { cert: Certification }) {
       {cert.image && (
         <img
           src={cert.image}
-          alt={cert.title}
+          alt={`${cert.title} certificate`}
           className="w-full h-56 object-cover"
+          loading="lazy"
         />
       )}
       <div className="p-4 flex flex-col flex-1">
         <h3 className="text-white font-semibold text-sm">{cert.title}</h3>
-        {cert.subtitle && <p className="text-white/70 text-xs">{cert.subtitle}</p>}
-        {cert.description && <p className="text-white/70 text-xs mt-1" dangerouslySetInnerHTML={{ __html: cert.description }} />}
+        {cert.subtitle && <p className="text-[#c8d6e5] text-xs">{cert.subtitle}</p>}
+        {cert.description && <p className="text-[#c8d6e5] text-xs mt-1" dangerouslySetInnerHTML={{ __html: cert.description }} />}
         {cert.tags && cert.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
             {cert.tags.map((tag, i) => (
@@ -502,7 +526,7 @@ function CertCard({ cert }: { cert: Certification }) {
 
   if (cert.url) {
     return (
-      <a href={cert.url} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={cert.url} target="_blank" rel="noopener noreferrer" className="block" aria-label={`View ${cert.title} certificate`}>
         {content}
       </a>
     );

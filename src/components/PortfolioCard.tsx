@@ -26,6 +26,7 @@ export default function PortfolioCard({
     <Link
       href={`/${username}`}
       className="group portfolio-card flex flex-col items-center text-center p-6 no-underline transition-all duration-300 hover:translate-y-[-6px]"
+      aria-label={`View portfolio of ${name}`}
     >
       {/* Profile Image */}
       <div className="relative w-24 h-24 rounded-full overflow-hidden mb-4 ring-2 ring-white/10 group-hover:ring-[#47b8ff]/50 transition-all duration-300">
@@ -36,15 +37,17 @@ export default function PortfolioCard({
               background: "rgba(71,184,255,0.2)",
               color: "#47b8ff",
             }}
+            aria-hidden="true"
           >
             {name.substring(0, 2).toUpperCase()}
           </div>
         ) : (
           <img
             src={imgSrc}
-            alt={name}
+            alt={`Portrait of ${name}`}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
+            loading="lazy"
           />
         )}
       </div>
@@ -52,7 +55,7 @@ export default function PortfolioCard({
       <h3 className="text-white font-semibold text-base mb-1 group-hover:text-[#47b8ff] transition-colors">
         {name}
       </h3>
-      <p className="text-white/60 text-xs mb-3 line-clamp-2">{tagline}</p>
+      <p className="text-[#c8d6e5] text-xs mb-3 line-clamp-2">{tagline}</p>
       {/* Project Count Badge */}
       <div
         className="mt-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
@@ -62,7 +65,7 @@ export default function PortfolioCard({
           border: "1px solid rgba(71,184,255,0.2)",
         }}
       >
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
