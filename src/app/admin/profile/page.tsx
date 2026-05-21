@@ -30,9 +30,11 @@ const defaultSocial = { facebook: "", x: "", instagram: "", upwork: "", linkedin
 
 export default function AdminProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,8 +53,10 @@ export default function AdminProfile() {
     try {
       const res = await fetch("/api/admin/profile");
       const data = await res.json();
-      if (data) {
-        setProfile(data);
+      // New response format: { profile, username }
+      const profileData = data?.profile ?? data;
+      if (profileData && profileData.id) {
+        setProfile(profileData);
       } else {
         setProfile({
           id: 0,
@@ -69,6 +73,7 @@ export default function AdminProfile() {
           social: { ...defaultSocial },
         });
       }
+      setUsername(data?.username ?? "");
     } catch (err) {
       console.error("Failed to fetch profile:", err);
     } finally {
@@ -90,18 +95,23 @@ export default function AdminProfile() {
     if (!profile?.name || !profile?.email) return;
     setSaving(true);
     setSaved(false);
+    setError(null);
     try {
       const res = await fetch("/api/admin/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile),
+        body: JSON.stringify({ ...profile, username }),
       });
       if (res.ok) {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data?.error || `Failed to save profile (${res.status})`);
       }
     } catch (err) {
       console.error("Failed to save profile:", err);
+      setError("Network error — could not reach server");
     } finally {
       setSaving(false);
     }
@@ -247,6 +257,29 @@ export default function AdminProfile() {
       <div className="portfolio-card p-6">
         <h2 className="text-white font-semibold text-lg mb-6">Profile Information</h2>
         <div className="space-y-4">
+          {/* ─── Username ─────────────────────────────────────────────── */}
+          <div>
+            <label className="block text-white/80 text-sm mb-1">
+              Username <span className="text-white/40 text-xs">(your unique portfolio URL)</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="text-white/40 text-sm whitespace-nowrap">{process.env.NEXT_PUBLIC_SITE_NAME?.toLowerCase() || "portfoliobuilder"}.com/</span>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setError(null);
+                }}
+                placeholder="your-username"
+                className="flex-1 px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2 font-mono"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              />
+            </div>
+            <p className="text-white/40 text-xs mt-1">
+              Must be 3-100 characters. Only letters, numbers, hyphens, and underscores.
+            </p>
+          </div>
           {/* ─── Profile Image — at top ──────────────────────────────────── */}
           <div>
             <label className="block text-white/80 text-sm mb-1">Profile Image</label>
@@ -418,6 +451,7 @@ export default function AdminProfile() {
               {saving ? "Saving..." : "Save Profile"}
             </button>
             {saved && <span className="text-green-400 text-sm">✓ Saved successfully</span>}
+            {error && <span className="text-red-400 text-sm">{error}</span>}
           </div>
         </div>
       </div>

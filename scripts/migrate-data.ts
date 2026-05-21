@@ -103,7 +103,7 @@ interface ProjectItem {
   liveLink: string;
 }
 
-async function main() {
+async function main(userId: string) {
   console.log("🚀 Starting data migration...\n");
 
   const dataDir = path.join(__dirname, "..", "js", "data");
@@ -130,6 +130,7 @@ async function main() {
       phone: myData.phone || null,
       location: myData.location || null,
       social: myData.social,
+      userId,
     };
 
     if (existingProfile.length > 0) {
@@ -149,6 +150,7 @@ async function main() {
         institution: edu.institution,
         year: edu.year,
         sortOrder: i,
+        userId,
       });
     }
     console.log(`   ✅ ${myData.education.length} education records migrated`);
@@ -160,7 +162,7 @@ async function main() {
     for (const [i, cat] of myData.skills.entries()) {
       const [insertedCat] = await db
         .insert(skillCategories)
-        .values({ name: cat.name, sortOrder: i })
+        .values({ name: cat.name, sortOrder: i, userId })
         .returning();
       for (const [j, item] of cat.items.entries()) {
         await db.insert(skills).values({
@@ -168,6 +170,7 @@ async function main() {
           name: item.name,
           image: item.image,
           sortOrder: j,
+          userId,
         });
       }
     }
@@ -193,6 +196,7 @@ async function main() {
         image: emp.image || null,
         isCurrent: i === 0, // First item is current role
         sortOrder: i,
+        userId,
       });
     }
     console.log(`   ✅ ${empData.length} employment records migrated`);
@@ -217,6 +221,7 @@ async function main() {
         url: cert.url || null,
         tags: cert.tags || null,
         sortOrder: i,
+        userId,
       });
     }
     console.log(`   ✅ ${certData.length} certifications migrated`);
@@ -256,6 +261,7 @@ async function main() {
           liveUrl: projectData.liveLink || null,
           priority: i < 6, // First 6 projects are priority
           sortOrder: i,
+          userId,
         });
         console.log(`   ✅ ${projectData.title}`);
       } catch (err) {
@@ -271,7 +277,14 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((error) => {
+const userId = process.argv[2];
+if (!userId) {
+  console.error("Usage: npx tsx scripts/migrate-data.ts <userId>");
+  console.error("Example: npx tsx scripts/migrate-data.ts user_3E0aL1OBFGGNooYtGzEAs387N05");
+  process.exit(1);
+}
+
+main(userId).catch((error) => {
   console.error("Migration failed:", error);
   process.exit(1);
 });

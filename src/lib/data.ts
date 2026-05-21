@@ -1,62 +1,116 @@
 import { db } from "@/db";
-import { profiles, education, skillCategories, skills, employment, projects, certifications } from "@/db/schema";
-import { eq, asc, desc } from "drizzle-orm";
+import {
+  profiles,
+  education,
+  skillCategories,
+  skills,
+  employment,
+  projects,
+  certifications,
+  users,
+} from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 
-// ─── Profile ─────────────────────────────────────────────────────────────────
-export async function getProfile() {
-  const result = await db.select().from(profiles).limit(1);
-  return result[0] || null;
+// ─── User Lookup ──────────────────────────────────────────────────────────────
+
+export async function getUserByUsername(username: string) {
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.username, username))
+    .limit(1);
+  return user ?? null;
 }
 
-// ─── Education ───────────────────────────────────────────────────────────────
-export async function getEducation() {
-  return db.select().from(education).orderBy(asc(education.sortOrder));
+export async function getUserById(userId: string) {
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+  return user ?? null;
 }
 
-// ─── Skills ──────────────────────────────────────────────────────────────────
-export async function getSkillCategories() {
+// ─── Profile ──────────────────────────────────────────────────────────────────
+
+export async function getProfile(userId: string) {
+  const [profile] = await db
+    .select()
+    .from(profiles)
+    .where(eq(profiles.userId, userId))
+    .limit(1);
+  return profile ?? null;
+}
+
+// ─── Education ────────────────────────────────────────────────────────────────
+
+export async function getEducation(userId: string) {
+  return db
+    .select()
+    .from(education)
+    .where(eq(education.userId, userId))
+    .orderBy(education.sortOrder);
+}
+
+// ─── Skill Categories & Skills ────────────────────────────────────────────────
+
+export async function getSkillCategories(userId: string) {
   const categories = await db
     .select()
     .from(skillCategories)
-    .orderBy(asc(skillCategories.sortOrder));
+    .where(eq(skillCategories.userId, userId))
+    .orderBy(skillCategories.sortOrder);
 
+  // Attach skills to each category
   const result = [];
   for (const cat of categories) {
     const items = await db
       .select()
       .from(skills)
-      .where(eq(skills.categoryId, cat.id))
-      .orderBy(asc(skills.sortOrder));
+      .where(
+        and(eq(skills.categoryId, cat.id), eq(skills.userId, userId))
+      )
+      .orderBy(skills.sortOrder);
     result.push({ ...cat, items });
   }
   return result;
 }
 
-// ─── Employment ──────────────────────────────────────────────────────────────
-export async function getEmployment() {
+// ─── Employment ───────────────────────────────────────────────────────────────
+
+export async function getEmployment(userId: string) {
   return db
     .select()
     .from(employment)
-    .orderBy(desc(employment.isCurrent), asc(employment.sortOrder));
+    .where(eq(employment.userId, userId))
+    .orderBy(employment.sortOrder);
 }
 
-// ─── Projects ────────────────────────────────────────────────────────────────
-export async function getProjects() {
+// ─── Projects ─────────────────────────────────────────────────────────────────
+
+export async function getProjects(userId: string) {
   return db
     .select()
     .from(projects)
-    .orderBy(desc(projects.priority), asc(projects.sortOrder));
+    .where(eq(projects.userId, userId))
+    .orderBy(projects.sortOrder);
 }
 
-export async function getProjectById(id: number) {
-  const result = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
-  return result[0] || null;
+export async function getProjectById(id: number, userId: string) {
+  const [project] = await db
+    .select()
+    .from(projects)
+    .where(and(eq(projects.id, id), eq(projects.userId, userId)))
+    .limit(1);
+  return project ?? null;
 }
 
-// ─── Certifications ──────────────────────────────────────────────────────────
-export async function getCertifications() {
+// ─── Certifications ───────────────────────────────────────────────────────────
+
+export async function getCertifications(userId: string) {
   return db
     .select()
     .from(certifications)
-    .orderBy(asc(certifications.sortOrder));
+    .where(eq(certifications.userId, userId))
+    .orderBy(certifications.sortOrder);
 }

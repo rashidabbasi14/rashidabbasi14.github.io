@@ -1,8 +1,17 @@
 import { pgTable, serial, varchar, text, boolean, jsonb, integer, timestamp } from "drizzle-orm/pg-core";
 
+// ─── Users ───────────────────────────────────────────────────────────────────
+export const users = pgTable("users", {
+  id: text("id").primaryKey(), // Clerk's userId
+  username: varchar("username", { length: 100 }).unique().notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // ─── Profile ─────────────────────────────────────────────────────────────────
 export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   tagline: varchar("tagline", { length: 255 }).notNull(),
@@ -27,6 +36,7 @@ export const profiles = pgTable("profiles", {
 // ─── Education ───────────────────────────────────────────────────────────────
 export const education = pgTable("education", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   degree: varchar("degree", { length: 255 }).notNull(),
   institution: varchar("institution", { length: 255 }).notNull(),
   year: varchar("year", { length: 20 }).notNull(),
@@ -36,12 +46,14 @@ export const education = pgTable("education", {
 // ─── Skill Categories ────────────────────────────────────────────────────────
 export const skillCategories = pgTable("skill_categories", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
 });
 
 export const skills = pgTable("skills", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   categoryId: integer("category_id").references(() => skillCategories.id, { onDelete: "cascade" }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   image: text("image").notNull(),
@@ -51,6 +63,7 @@ export const skills = pgTable("skills", {
 // ─── Employment ──────────────────────────────────────────────────────────────
 export const employment = pgTable("employment", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   company: varchar("company", { length: 255 }).notNull(),
   duration: varchar("duration", { length: 100 }),
@@ -63,6 +76,7 @@ export const employment = pgTable("employment", {
 // ─── Projects ────────────────────────────────────────────────────────────────
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   subtitle: varchar("subtitle", { length: 255 }),
   description: text("description"),
@@ -81,6 +95,7 @@ export const projects = pgTable("projects", {
 // ─── Certifications ──────────────────────────────────────────────────────────
 export const certifications = pgTable("certifications", {
   id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   subtitle: varchar("subtitle", { length: 255 }),
   description: text("description"),

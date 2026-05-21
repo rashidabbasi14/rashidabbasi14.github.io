@@ -16,9 +16,13 @@ interface FooterProps {
   aboutText?: string;
   social?: SocialLinks;
   onContactClick?: () => void;
+  /** Username for portfolio context — shows "Powered by" badge */
+  username?: string;
 }
 
-export default function Footer({ email, phone, location, aboutText, social, onContactClick }: FooterProps) {
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "PortfolioBuilder";
+
+export default function Footer({ email, phone, location, aboutText, social, onContactClick, username }: FooterProps) {
   return (
     <footer className="text-white py-5" style={{ backgroundColor: "#0b2341", borderTop: "1px solid rgba(255,255,255,0.12)" }}>
       <div className="container mx-auto px-4">
@@ -87,9 +91,17 @@ export default function Footer({ email, phone, location, aboutText, social, onCo
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Copyright & Powered By */}
         <div className="mt-6 pt-4 text-center text-white/60 text-sm" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
-          &copy; {new Date().getFullYear()} Rashid Ahmed Abbasi. All Rights Reserved.
+          <p>
+            &copy; {new Date().getFullYear()} {username || "Portfolio"}. All Rights Reserved.
+          </p>
+          <p className="mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>
+            Powered by{" "}
+            <Link href="/" className="no-underline" style={{ color: "#47b8ff" }}>
+              {siteName}
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

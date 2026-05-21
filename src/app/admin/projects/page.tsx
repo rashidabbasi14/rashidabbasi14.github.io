@@ -34,7 +34,7 @@ export default function AdminProjects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch("/api/projects");
+      const res = await fetch("/api/admin/projects");
       setProjects(await res.json());
     } catch (err) {
       console.error("Failed to fetch projects:", err);

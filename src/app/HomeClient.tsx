@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
 import AutoScrollCarousel from "@/components/AutoScrollCarousel";
@@ -72,7 +71,7 @@ interface Certification {
   tags: string[] | null;
 }
 
-export default function HomeClient() {
+export default function HomeClient({ userId, username }: { userId?: string; username?: string }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [education, setEducation] = useState<Education[]>([]);
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
@@ -87,13 +86,14 @@ export default function HomeClient() {
   useEffect(() => {
     async function fetchData() {
       try {
+        const query = userId ? `?userId=${userId}` : "";
         const [profileRes, eduRes, skillsRes, empRes, projRes, certRes] = await Promise.all([
-          fetch("/api/profile"),
-          fetch("/api/education"),
-          fetch("/api/skills"),
-          fetch("/api/employment"),
-          fetch("/api/projects"),
-          fetch("/api/certifications"),
+          fetch(`/api/profile${query}`),
+          fetch(`/api/education${query}`),
+          fetch(`/api/skills${query}`),
+          fetch(`/api/employment${query}`),
+          fetch(`/api/projects${query}`),
+          fetch(`/api/certifications${query}`),
         ]);
 
         setProfile(await profileRes.json());
@@ -109,7 +109,7 @@ export default function HomeClient() {
       }
     }
     fetchData();
-  }, []);
+  }, [userId]);
 
   // Scroll to hash after data loads (e.g., navigating from another page to /#contact)
   useEffect(() => {
@@ -140,13 +140,12 @@ export default function HomeClient() {
 
   return (
     <>
-      <Navbar />
       {/* Hero Section */}
       <header
         className="py-5 flex items-center min-h-[60vh]"
         style={{
           backgroundImage:
-            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/bg.jpg')",
+            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -312,7 +311,7 @@ export default function HomeClient() {
           speed={35}
         >
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={project} username={username} />
           ))}
         </AutoScrollCarousel>
 
@@ -362,6 +361,7 @@ export default function HomeClient() {
         aboutText={profile?.footerAboutMe}
         social={profile?.social}
         onContactClick={() => setContactOpen(true)}
+        username={username}
       />
 
       {/* Contact Modal */}
@@ -444,9 +444,10 @@ function EmploymentCard({ item, size }: { item: Employment; size: number }) {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, username }: { project: Project; username?: string }) {
+  const basePath = username ? `/${username}` : "";
   return (
-    <Link href={`/project/${project.id}`} className="portfolio-card flex flex-col text-decoration-none text-reset">
+    <Link href={`${basePath}/project/${project.id}`} className="portfolio-card flex flex-col text-decoration-none text-reset">
       {project.coverImage && (
         <img
           src={project.coverImage}

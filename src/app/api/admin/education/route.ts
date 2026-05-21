@@ -1,14 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "@/db";
 import { education } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/admin/education
 export async function GET() {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const data = await db.select().from(education).orderBy(education.sortOrder);
+    const data = await db
+      .select()
+      .from(education)
+      .where(eq(education.userId, userId))
+      .orderBy(education.sortOrder);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Failed to fetch education:", error);
@@ -18,11 +28,17 @@ export async function GET() {
 
 // POST /api/admin/education — Create
 export async function POST(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const [created] = await db
       .insert(education)
       .values({
+        userId,
         degree: body.degree,
         institution: body.institution,
         year: body.year,
@@ -38,6 +54,11 @@ export async function POST(request: NextRequest) {
 
 // PUT /api/admin/education — Update
 export async function PUT(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     if (!body.id) {
@@ -51,7 +72,7 @@ export async function PUT(request: NextRequest) {
         year: body.year,
         sortOrder: body.sortOrder ?? 0,
       })
-      .where(eq(education.id, body.id))
+      .where(and(eq(education.id, body.id), eq(education.userId, userId)))
       .returning();
     if (!updated) {
       return NextResponse.json({ error: "Education not found" }, { status: 404 });
@@ -65,12 +86,17 @@ export async function PUT(request: NextRequest) {
 
 // DELETE /api/admin/education?id=X
 export async function DELETE(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const id = parseInt(request.nextUrl.searchParams.get("id") || "", 10);
     if (isNaN(id)) {
       return NextResponse.json({ error: "Valid education ID is required" }, { status: 400 });
     }
-    await db.delete(education).where(eq(education.id, id));
+    await db.delete(education).where(and(eq(education.id, id), eq(education.userId, userId)));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Failed to delete education:", error);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { uploadFile } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
@@ -6,6 +7,11 @@ export const maxDuration = 30;
 
 // POST /api/upload — Upload a file to Cloudflare R2
 export async function POST(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -25,10 +31,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG" }, { status: 400 });
     }
 
-    // Generate a unique key: timestamp-originalname
+    // Generate a unique key: userId/timestamp-originalname
     const timestamp = Date.now();
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const key = `uploads/${timestamp}-${safeName}`;
+    const key = `uploads/${userId}/${timestamp}-${safeName}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const url = await uploadFile(key, buffer, file.type);

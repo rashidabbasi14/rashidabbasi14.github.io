@@ -4,7 +4,7 @@ import { getProjectById } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -14,7 +14,13 @@ export async function GET(
       return NextResponse.json({ error: "Invalid project ID" }, { status: 400 });
     }
 
-    const project = await getProjectById(projectId);
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+    if (!userId) {
+      return NextResponse.json({ error: "userId query parameter is required" }, { status: 400 });
+    }
+
+    const project = await getProjectById(projectId, userId);
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }

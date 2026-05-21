@@ -1,28 +1,39 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 interface NavbarProps {
   isAdmin?: boolean;
+  /** Username for portfolio context — used to build correct links on portfolio pages */
+  username?: string;
 }
 
-export default function Navbar({ isAdmin }: NavbarProps) {
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "PortfolioBuilder";
+
+export default function Navbar({ isAdmin, username }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [siteName, setSiteName] = useState("");
+  const [profileName, setProfileName] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
+
+  // Build the base path for portfolio links
+  const basePath = username ? `/${username}` : "";
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch("/api/profile");
+        const query = username ? `?username=${username}` : "";
+        const res = await fetch(`/api/profile${query}`);
         if (res.ok) {
           const data = await res.json();
           if (data.name) {
-            setSiteName(data.name);
+            setProfileName(data.name);
           }
         }
       } catch {
@@ -32,10 +43,31 @@ export default function Navbar({ isAdmin }: NavbarProps) {
     if (!isAdmin) {
       fetchProfile();
     }
-  }, [isAdmin]);
+  }, [isAdmin, username]);
+
+  // Check if the logged-in user is the owner of this portfolio
+  useEffect(() => {
+    async function checkOwnership() {
+      if (!isSignedIn || !username || isAdmin) {
+        setIsOwner(false);
+        return;
+      }
+      try {
+        const res = await fetch("/api/user/me");
+        if (res.ok) {
+          const user = await res.json();
+          setIsOwner(user.username === username);
+        }
+      } catch {
+        setIsOwner(false);
+      }
+    }
+    checkOwnership();
+  }, [isSignedIn, username, isAdmin]);
 
   const scrollToContact = useCallback(() => {
-    if (pathname === "/") {
+    const homePath = basePath || "/";
+    if (pathname === homePath || pathname === `${homePath}/`) {
       // Already on home page, scroll directly
       const el = document.getElementById("contact");
       if (el) {
@@ -44,8 +76,8 @@ export default function Navbar({ isAdmin }: NavbarProps) {
       }
     }
     // Navigate to home page with hash
-    router.push("/#contact");
-  }, [pathname, router]);
+    router.push(`${homePath}/#contact`);
+  }, [pathname, router, basePath]);
 
   const handleMobileLinkClick = () => {
     setIsOpen(false);
@@ -56,10 +88,20 @@ export default function Navbar({ isAdmin }: NavbarProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
+            {/* Logo — always visible, links to landing page */}
+            <Link href="/" className="flex items-center shrink-0">
+              <Image
+                src="/uploads/logo.png"
+                alt={siteName}
+                width={36}
+                height={36}
+                className="w-8 h-8 md:w-9 md:h-9 object-contain"
+              />
+            </Link>
             {isAdmin && (
               <>
                 <Link
-                  href="/"
+                  href={username ? `/${username}` : "/"}
                   className="text-white/70 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hidden md:block"
                 >
                   View Site
@@ -70,8 +112,8 @@ export default function Navbar({ isAdmin }: NavbarProps) {
               </>
             )}
             {!isAdmin && (
-              <Link href="/" className="text-white font-bold text-lg tracking-wide">
-                {siteName || "Rashid Ahmed Abbasi"}
+              <Link href={basePath || "/"} className="text-white font-bold text-lg tracking-wide">
+                {profileName || siteName}
               </Link>
             )}
           </div>
@@ -107,16 +149,29 @@ export default function Navbar({ isAdmin }: NavbarProps) {
               </>
             ) : (
               <>
-                <NavLink href="/#home">Home</NavLink>
-                <NavLink href="/#employment">Employment</NavLink>
-                <NavLink href="/projects">Projects</NavLink>
-                <NavLink href="/#certifications">Certifications</NavLink>
+                <NavLink href={`${basePath}/#home`}>Home</NavLink>
+                <NavLink href={`${basePath}/#employment`}>Employment</NavLink>
+                <NavLink href={`${basePath}/projects`}>Projects</NavLink>
+                <NavLink href={`${basePath}/#certifications`}>Certifications</NavLink>
                 <button
                   onClick={scrollToContact}
                   className="text-white/90 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg cursor-pointer"
                 >
                   Contact
                 </button>
+                {isOwner && (
+                  <Link
+                    href="/admin"
+                    className="text-white/90 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hover:shadow-lg ml-2"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                {isSignedIn && (
+                  <div className="ml-2">
+                    <UserButton />
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -133,23 +188,31 @@ export default function Navbar({ isAdmin }: NavbarProps) {
                 <MobileNavLink href="/admin/skills" onClick={handleMobileLinkClick}>Skills</MobileNavLink>
                 <MobileNavLink href="/admin/certifications" onClick={handleMobileLinkClick}>Certifications</MobileNavLink>
                 <MobileNavLink href="/admin/education" onClick={handleMobileLinkClick}>Education</MobileNavLink>
-                <MobileNavLink href="/" onClick={handleMobileLinkClick}>View Site</MobileNavLink>
+                <MobileNavLink href={username ? `/${username}` : "/"} onClick={handleMobileLinkClick}>View Site</MobileNavLink>
                 <div className="px-4 py-2">
                   <UserButton />
                 </div>
               </>
             ) : (
               <>
-                <MobileNavLink href="/#home" onClick={handleMobileLinkClick}>Home</MobileNavLink>
-                <MobileNavLink href="/#employment" onClick={handleMobileLinkClick}>Employment</MobileNavLink>
-                <MobileNavLink href="/projects" onClick={handleMobileLinkClick}>Projects</MobileNavLink>
-                <MobileNavLink href="/#certifications" onClick={handleMobileLinkClick}>Certifications</MobileNavLink>
+                <MobileNavLink href={`${basePath}/#home`} onClick={handleMobileLinkClick}>Home</MobileNavLink>
+                <MobileNavLink href={`${basePath}/#employment`} onClick={handleMobileLinkClick}>Employment</MobileNavLink>
+                <MobileNavLink href={`${basePath}/projects`} onClick={handleMobileLinkClick}>Projects</MobileNavLink>
+                <MobileNavLink href={`${basePath}/#certifications`} onClick={handleMobileLinkClick}>Certifications</MobileNavLink>
                 <button
                   onClick={() => { setIsOpen(false); scrollToContact(); }}
                   className="block text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 w-full text-left cursor-pointer"
                 >
                   Contact
                 </button>
+                {isOwner && (
+                  <MobileNavLink href="/admin" onClick={handleMobileLinkClick}>Dashboard</MobileNavLink>
+                )}
+                {isSignedIn && (
+                  <div className="px-4 py-2">
+                    <UserButton />
+                  </div>
+                )}
               </>
             )}
           </div>

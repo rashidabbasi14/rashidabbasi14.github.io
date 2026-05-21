@@ -1,11 +1,28 @@
-import { NextResponse } from "next/server";
-import { getProfile } from "@/lib/data";
+import { NextRequest, NextResponse } from "next/server";
+import { getProfile, getUserByUsername } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const profile = await getProfile();
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+    const username = searchParams.get("username");
+
+    // Resolve userId from username if provided
+    let resolvedUserId = userId;
+    if (!resolvedUserId && username) {
+      const user = await getUserByUsername(username);
+      if (user) {
+        resolvedUserId = user.id;
+      }
+    }
+
+    if (!resolvedUserId) {
+      return NextResponse.json({ error: "userId or username query parameter is required" }, { status: 400 });
+    }
+
+    const profile = await getProfile(resolvedUserId);
     if (!profile) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
