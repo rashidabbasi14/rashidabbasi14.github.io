@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import RichTextEditor from "@/components/RichTextEditor";
 import Modal from "@/components/Modal";
+import TagInput from "@/components/TagInput";
 
 interface Certification {
   id: number;
@@ -219,17 +220,11 @@ export default function AdminCertifications() {
             />
           </div>
           <div>
-            <label className="block text-white/80 text-sm mb-1">Tags (comma separated)</label>
-            <input
-              type="text"
-              value={editing?.tags?.join(", ") || ""}
-              onChange={(e) => setEditing({
-                ...editing,
-                tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-              })}
-              className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-              style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-              placeholder="e.g. JavaScript, React, Node.js"
+            <label className="block text-white/80 text-sm mb-1">Tags</label>
+            <TagInput
+              tags={editing?.tags || []}
+              onChange={(tags) => setEditing({ ...editing, tags })}
+              placeholder="Type a tag and press Enter"
             />
           </div>
           <div className="flex gap-2 pt-2">

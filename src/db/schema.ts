@@ -30,6 +30,7 @@ export const profiles = pgTable("profiles", {
     linkedin?: string;
     github?: string;
   }>().notNull(),
+  isPrivate: boolean("is_private").default(false).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

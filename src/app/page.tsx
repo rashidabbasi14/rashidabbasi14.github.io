@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
-import { getUserById } from "@/lib/data";
+import { getUserById, getLandingStats, getPortfolios } from "@/lib/data";
 import UserButtonWrapper from "@/components/UserButtonWrapper";
+import PortfolioCard from "@/components/PortfolioCard";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "PortfolioBuilder";
 
@@ -20,6 +21,12 @@ export default async function LandingPage() {
       // User might not exist yet
     }
   }
+
+  // Fetch real aggregate stats from the database
+  const stats = await getLandingStats();
+
+  // Fetch featured portfolios
+  const portfolios = await getPortfolios();
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#0e1726" }}>
@@ -83,7 +90,16 @@ export default async function LandingPage() {
       </nav>
 
       {/* ─── Hero Section ──────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
+      <section
+        className="relative overflow-hidden"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(11, 35, 65, 0.85), rgba(5, 14, 30, 0.92)), url('/uploads/background.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {/* Background decoration */}
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full opacity-10 pointer-events-none"
@@ -93,17 +109,6 @@ export default async function LandingPage() {
           }}
         />
         <div className="container mx-auto px-4 py-28 md:py-36 text-center relative">
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8"
-            style={{
-              backgroundColor: "rgba(71, 184, 255, 0.1)",
-              color: "#47b8ff",
-              border: "1px solid rgba(71, 184, 255, 0.2)",
-            }}
-          >
-            <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: "#47b8ff" }} />
-            Launch your portfolio in minutes
-          </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight" style={{ color: "#f8fbff" }}>
             Build Your{" "}
             <span
@@ -155,25 +160,89 @@ export default async function LandingPage() {
       {/* ─── Stats Bar ─────────────────────────────────────────────── */}
       <section className="container mx-auto px-4 py-12">
         <div
-          className="rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+          className="rounded-2xl p-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center"
           style={{
             background:
               "linear-gradient(180deg, rgba(16, 31, 60, 0.96), rgba(8, 17, 30, 0.95))",
             border: "1px solid rgba(71, 184, 255, 0.16)",
           }}
         >
-          {stats.map((stat, i) => (
-            <div key={i}>
-              <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
-                {stat.value}
-              </div>
-              <div className="text-sm" style={{ color: "#b0c4de" }}>
-                {stat.label}
-              </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
+              {stats.totalUsers}
             </div>
-          ))}
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              Total Portfolios
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#22c55e" }}>
+              {stats.totalPublic}
+            </div>
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              Public
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#f59e0b" }}>
+              {stats.totalPrivate}
+            </div>
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              Private
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
+              {stats.totalSkills}+
+            </div>
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              Technologies Supported
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
+              {stats.totalProjects}+
+            </div>
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              Projects Showcased
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold mb-1" style={{ color: "#47b8ff" }}>
+              Free
+            </div>
+            <div className="text-sm" style={{ color: "#b0c4de" }}>
+              To Get Started
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* ─── Featured Portfolios Section ────────────────────────────── */}
+      {portfolios.length > 0 && (
+        <section className="container mx-auto px-4 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#f8fbff" }}>
+              Featured Portfolios
+            </h2>
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: "#b0c4de" }}>
+              Explore portfolios built by our community members.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {portfolios.map((p) => (
+              <PortfolioCard
+                key={p.username}
+                username={p.username}
+                name={p.name}
+                tagline={p.tagline}
+                image={p.image}
+                projectCount={p.projectCount}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ─── Features Section ──────────────────────────────────────── */}
       <section id="features" className="container mx-auto px-4 py-20">
@@ -363,13 +432,6 @@ const features = [
     description:
       "Let visitors reach out to you directly through your portfolio with an integrated contact form.",
   },
-];
-
-const stats = [
-  { value: "100+", label: "Portfolios Created" },
-  { value: "50+", label: "Technologies Supported" },
-  { value: "99.9%", label: "Uptime" },
-  { value: "Free", label: "To Get Started" },
 ];
 
 const steps = [

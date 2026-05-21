@@ -8,6 +8,13 @@
       "when": 1779330697058,
       "tag": "0000_past_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779337290965,
+      "tag": "0001_clear_vengeance",
+      "breakpoints": true
     }
   ]
 }

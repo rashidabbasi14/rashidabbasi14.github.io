@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "clean": "node -e \"const fs=require('fs');const p='.next';fs.existsSync(p)&&fs.rmSync(p,{recursive:true});console.log('Cleaned .next')\"",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

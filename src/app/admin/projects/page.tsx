@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import RichTextEditor from "@/components/RichTextEditor";
 import Modal from "@/components/Modal";
+import TagInput from "@/components/TagInput";
 
 interface Project {
   id: number;
@@ -376,21 +377,14 @@ export default function AdminProjects() {
             </div>
           </div>
 
-          {/* Technologies */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-white/80 text-sm mb-1">Technologies (comma separated)</label>
-              <input
-                type="text"
-                value={editingProject?.technologies?.join(", ") || ""}
-                onChange={(e) => setEditingProject({
-                  ...editingProject,
-                  technologies: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-                })}
-                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-              />
-            </div>
+          {/* Technologies - full width */}
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Technologies</label>
+            <TagInput
+              tags={editingProject?.technologies || []}
+              onChange={(tags) => setEditingProject({ ...editingProject, technologies: tags })}
+              placeholder="Type a technology and press Enter"
+            />
           </div>
 
           {/* URLs */}

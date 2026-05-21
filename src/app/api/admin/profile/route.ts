@@ -126,6 +126,7 @@ export async function POST(request: NextRequest) {
           phone: body.phone || null,
           location: body.location || null,
           social: body.social,
+          isPrivate: body.isPrivate ?? false,
           updatedAt: new Date(),
         })
         .where(and(eq(profiles.id, existing.id), eq(profiles.userId, userId)))
@@ -147,6 +148,7 @@ export async function POST(request: NextRequest) {
           phone: body.phone || null,
           location: body.location || null,
           social: body.social,
+          isPrivate: body.isPrivate ?? false,
         })
         .returning();
       return NextResponse.json(created, { status: 201 });

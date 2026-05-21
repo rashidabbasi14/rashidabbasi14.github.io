@@ -16,6 +16,7 @@ interface Profile {
   email: string;
   phone: string | null;
   location: string | null;
+  isPrivate?: boolean;
   social: {
     facebook?: string;
     x?: string;
@@ -81,7 +82,7 @@ export default function AdminProfile() {
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     if (!profile) return;
     setProfile({ ...profile, [field]: value });
   };
@@ -438,6 +439,33 @@ export default function AdminProfile() {
                 />
               </div>
             ))}
+          </div>
+
+          {/* ─── Privacy Toggle ──────────────────────────────────────────── */}
+          <div className="pt-4 border-t border-white/10">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={!!profile.isPrivate}
+                onClick={() => handleChange("isPrivate", !profile.isPrivate)}
+                className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200"
+                style={{
+                  backgroundColor: profile.isPrivate ? "#47b8ff" : "rgba(255,255,255,0.15)",
+                }}
+              >
+                <span
+                  className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200"
+                  style={{ transform: profile.isPrivate ? "translateX(1.375rem)" : "translateX(0.25rem)" }}
+                />
+              </button>
+              <div className="flex flex-col">
+                <span className="text-white/80 text-sm font-medium">Private Portfolio</span>
+                <span className="text-white/40 text-xs">
+                  When enabled, your portfolio won't appear in the landing page and only you can view it.
+                </span>
+              </div>
+            </label>
           </div>
 
           {/* Save Button */}

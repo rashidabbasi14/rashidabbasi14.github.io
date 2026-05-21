@@ -9,7 +9,7 @@ import {
   certifications,
   users,
 } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, count } from "drizzle-orm";
 
 // ─── User Lookup ──────────────────────────────────────────────────────────────
 
@@ -113,4 +113,85 @@ export async function getCertifications(userId: string) {
     .from(certifications)
     .where(eq(certifications.userId, userId))
     .orderBy(certifications.sortOrder);
+}
+
+// ─── Landing Page Stats ───────────────────────────────────────────────────────
+
+export interface LandingStats {
+  totalUsers: number;
+  totalPublic: number;
+  totalPrivate: number;
+  totalProjects: number;
+  totalSkills: number;
+  totalCertifications: number;
+}
+
+export async function getLandingStats(): Promise<LandingStats> {
+  const [userResult] = await db.select({ value: count() }).from(users);
+  const [publicResult] = await db
+    .select({ value: count() })
+    .from(profiles)
+    .where(eq(profiles.isPrivate, false));
+  const [privateResult] = await db
+    .select({ value: count() })
+    .from(profiles)
+    .where(eq(profiles.isPrivate, true));
+  const [projectResult] = await db.select({ value: count() }).from(projects);
+  const [skillResult] = await db.select({ value: count() }).from(skills);
+  const [certResult] = await db.select({ value: count() }).from(certifications);
+
+  return {
+    totalUsers: userResult?.value ?? 0,
+    totalPublic: publicResult?.value ?? 0,
+    totalPrivate: privateResult?.value ?? 0,
+    totalProjects: projectResult?.value ?? 0,
+    totalSkills: skillResult?.value ?? 0,
+    totalCertifications: certResult?.value ?? 0,
+  };
+}
+
+// ─── Featured Portfolios ──────────────────────────────────────────────────────
+
+export interface PortfolioThumbnail {
+  username: string;
+  name: string;
+  title: string;
+  tagline: string;
+  image: string;
+  projectCount: number;
+}
+
+export async function getPortfolios(): Promise<PortfolioThumbnail[]> {
+  const rows = await db
+    .select({
+      username: users.username,
+      name: profiles.name,
+      title: profiles.title,
+      tagline: profiles.tagline,
+      image: profiles.image,
+      userId: users.id,
+    })
+    .from(users)
+    .innerJoin(profiles, eq(users.id, profiles.userId))
+    .where(eq(profiles.isPrivate, false))
+    .orderBy(users.createdAt);
+
+  // Attach project counts
+  const result: PortfolioThumbnail[] = [];
+  for (const row of rows) {
+    const [countResult] = await db
+      .select({ value: count() })
+      .from(projects)
+      .where(eq(projects.userId, row.userId));
+    result.push({
+      username: row.username,
+      name: row.name,
+      title: row.title,
+      tagline: row.tagline,
+      image: row.image,
+      projectCount: countResult?.value ?? 0,
+    });
+  }
+
+  return result;
 }
