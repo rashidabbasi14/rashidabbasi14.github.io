@@ -1,26 +1,245 @@
 @import "tailwindcss";
 
+/* Custom CSS Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #0b2341;
+  --accent: #47b8ff;
+  --bg: #0e1726;
+  --text: #e8eef5;
+  --white: #f8fbff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base reset - only what Tailwind doesn't cover */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(71, 184, 255, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 184, 255, 0.5);
+}
+
+/* Section heading style */
+.section-heading {
+  border-left: 5px solid var(--accent);
+  padding-left: 15px;
+  margin-bottom: 1.5rem;
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Card style */
+.portfolio-card {
+  background: linear-gradient(180deg, rgba(16, 31, 60, 0.96), rgba(8, 17, 30, 0.95));
+  border: 1px solid rgba(71, 184, 255, 0.16);
+  border-radius: 1.25rem;
+  color: var(--text);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(71, 184, 255, 0.28);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+}
+
+/* Tag badge */
+.tag-badge {
+  background: rgba(71, 184, 255, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(71, 184, 255, 0.18);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  display: inline-block;
+}
+
+/* Skill section */
+.skill-section {
+  background: rgba(16, 31, 60, 0.6);
+  border: 1px solid rgba(71, 184, 255, 0.15);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.skill-section:hover {
+  border-color: rgba(71, 184, 255, 0.3);
+  background: rgba(26, 47, 80, 0.6);
+}
+
+/* Timeline */
+.timeline-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1rem;
+}
+
+.timeline-date {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+/* Readme content */
+.readme-content h1, .readme-content h2, .readme-content h3, .readme-content h4, .readme-content h5, .readme-content h6 {
+  color: var(--white);
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  line-height: 1.2;
+}
+
+.readme-content h1 {
+  font-size: 2.2em;
+  border-bottom: 2px solid rgba(71, 184, 255, 0.3);
+  padding-bottom: 0.5em;
+}
+
+.readme-content h2 {
+  font-size: 1.8em;
+  border-bottom: 1px solid rgba(71, 184, 255, 0.2);
+  padding-bottom: 0.4em;
+}
+
+.readme-content h3 { font-size: 1.5em; }
+
+.readme-content p {
+  color: rgba(232, 238, 245, 0.88);
+  margin-bottom: 1em;
+}
+
+.readme-content a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.readme-content a:hover { text-decoration: underline; }
+
+.readme-content ul, .readme-content ol {
+  padding-left: 2em;
+  margin-bottom: 1em;
+  color: rgba(232, 238, 245, 0.88);
+}
+
+.readme-content ul li, .readme-content ol li { margin-bottom: 0.5em; }
+
+.readme-content code {
+  background-color: rgba(71, 184, 255, 0.1);
+  color: var(--accent);
+  padding: 0.2em 0.4em;
+  border-radius: 0.3em;
+  font-family: var(--font-mono);
+}
+
+.readme-content pre {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(71, 184, 255, 0.1);
+  padding: 1em;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1.5em;
+}
+
+.readme-content pre code {
+  background-color: transparent;
+  color: #e8eef5;
+  padding: 0;
+  font-size: 0.9em;
+}
+
+.readme-content blockquote {
+  border-left: 4px solid var(--accent);
+  padding-left: 1em;
+  margin: 1.5em 0;
+  color: rgba(232, 238, 245, 0.7);
+}
+
+.readme-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* WhatsApp Float Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background-color: #25D366;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  z-index: 9999;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  animation: whatsapp-pulse 2s infinite;
+}
+
+.whatsapp-float:hover {
+  background-color: #20bd5a;
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55);
+}
+
+@keyframes whatsapp-pulse {
+  0% { box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 4px 24px rgba(37, 211, 102, 0.7); }
+  100% { box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4); }
+}
+
+.whatsapp-tooltip {
+  position: absolute;
+  right: 64px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  font-weight: 500;
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+  opacity: 1;
+}
+
+@media (max-width: 576px) {
+  .whatsapp-float {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+    bottom: 16px;
+    right: 16px;
+  }
 }
