@@ -222,7 +222,6 @@ export default function HomeClient() {
                             src={skill.image}
                             alt={skill.name}
                             className="w-[45px] h-[45px] object-cover rounded-full"
-                            style={{ border: "2px solid rgba(71,184,255,0.3)" }}
                             onError={(e) => {
                               const target = e.currentTarget;
                               target.style.display = "none";
@@ -396,9 +395,9 @@ function HeroLink({ href, icon, label }: { href?: string; icon: React.ReactNode;
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg text-white/90 border border-white/40 hover:bg-white/10 transition-all duration-200"
+      className="inline-flex items-center justify-center gap-2 min-w-[110px] px-3 py-1.5 text-sm rounded-lg text-white/90 border border-white/40 hover:bg-white/10 transition-all duration-200"
     >
-      <span className="w-4 h-4">{icon}</span>
+      <span className="w-4 h-4 shrink-0">{icon}</span>
       {label && <span>{label}</span>}
     </a>
   );
@@ -525,7 +524,11 @@ function InstagramIcon() {
 }
 
 function UpworkIcon() {
-  return <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 13.32a3.47 3.47 0 01-3.47-3.47c0-.77.25-1.48.67-2.05l-1.06 3.08h-1.56l1.06-3.08c.42-.57.67-1.28.67-2.05a3.47 3.47 0 013.47-3.47 3.47 3.47 0 013.47 3.47 3.47 3.47 0 01-3.47 3.47M6.3 2.62H3.72v9.65h2.58V2.62zm7.14 0h-2.58v4.73a3.47 3.47 0 00-3.47-3.47 3.47 3.47 0 00-3.47 3.47c0 1.92 1.55 3.47 3.47 3.47.96 0 1.83-.39 2.46-1.02v.87c0 1.92-1.55 3.47-3.47 3.47a3.47 3.47 0 01-3.47-3.47H3.72c0 3.34 2.7 6.05 6.05 6.05a6.05 6.05 0 006.05-6.05V2.62h-2.58v4.73a3.47 3.47 0 01-3.47 3.47 3.47 3.47 0 01-3.47-3.47c0-1.92 1.55-3.47 3.47-3.47.96 0 1.83.39 2.46 1.02V2.62z"/></svg>;
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.548-1.405-.002-2.543-1.143-2.545-2.548V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/>
+    </svg>
+  );
 }
 
 function LinkedInIcon() {
