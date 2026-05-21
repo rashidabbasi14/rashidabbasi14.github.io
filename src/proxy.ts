@@ -27,18 +27,29 @@ const RESERVED_SUBDOMAINS = new Set([
   "onboarding",
 ]);
 
+/**
+ * The main domain where the app is hosted (e.g., "portfoliobuilder.com").
+ * Subdomain rewrites (e.g., username.portfoliobuilder.com → /username)
+ * are ONLY applied when the hostname ends with this domain.
+ *
+ * Falls back to the Vercel deployment URL in preview environments so
+ * that subdomain detection does NOT incorrectly rewrite Vercel's
+ * `*.vercel.app` URLs.
+ */
+const MAIN_DOMAIN = process.env.NEXT_PUBLIC_MAIN_DOMAIN || "";
+
 export default clerkMiddleware(async (auth, req) => {
   const url = new URL(req.url);
   const host = req.headers.get("host") || "";
   const hostname = host.split(":")[0]; // Remove port if present
 
   // ─── Subdomain Detection ────────────────────────────────────────────
-  // Check if we're on a subdomain (e.g., rashidabbasi.portfoliobuilder.com)
-  const parts = hostname.split(".");
-  const isSubdomain = parts.length > 2; // e.g., ["rashidabbasi", "portfoliobuilder", "com"]
-
-  if (isSubdomain) {
-    const subdomain = parts[0].toLowerCase();
+  // Only apply subdomain rewrites when the hostname ends with the
+  // configured MAIN_DOMAIN (e.g., "portfoliobuilder.com").
+  // This prevents Vercel deployment URLs (e.g., app.vercel.app) from
+  // being incorrectly treated as user subdomains.
+  if (MAIN_DOMAIN && hostname.endsWith(`.${MAIN_DOMAIN}`)) {
+    const subdomain = hostname.slice(0, -(MAIN_DOMAIN.length + 1)).toLowerCase();
 
     // Skip reserved subdomains
     if (!RESERVED_SUBDOMAINS.has(subdomain)) {
