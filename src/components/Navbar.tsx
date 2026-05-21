@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { UserButton } from "@clerk/nextjs";
 
 interface NavbarProps {
@@ -11,8 +11,28 @@ interface NavbarProps {
 
 export default function Navbar({ isAdmin }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [siteName, setSiteName] = useState("");
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.name) {
+            setSiteName(data.name);
+          }
+        }
+      } catch {
+        // Profile might not exist yet
+      }
+    }
+    if (!isAdmin) {
+      fetchProfile();
+    }
+  }, [isAdmin]);
 
   const scrollToContact = useCallback(() => {
     if (pathname === "/") {
@@ -51,7 +71,7 @@ export default function Navbar({ isAdmin }: NavbarProps) {
             )}
             {!isAdmin && (
               <Link href="/" className="text-white font-bold text-lg tracking-wide">
-                Rashid Ahmed Abbasi
+                {siteName || "Rashid Ahmed Abbasi"}
               </Link>
             )}
           </div>
