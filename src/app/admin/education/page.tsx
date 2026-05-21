@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Modal from "@/components/Modal";
 
 interface Education {
   id: number;
@@ -85,73 +86,74 @@ export default function AdminEducation() {
         </button>
       </div>
 
-      {(editing || isCreating) && (
-        <div className="portfolio-card p-6 mb-6">
-          <h2 className="text-white font-semibold text-lg mb-4">{isCreating ? "Create" : "Edit"} Education</h2>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Degree *</label>
-                <input
-                  type="text"
-                  value={editing?.degree || ""}
-                  onChange={(e) => setEditing({ ...editing, degree: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Institution *</label>
-                <input
-                  type="text"
-                  value={editing?.institution || ""}
-                  onChange={(e) => setEditing({ ...editing, institution: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
+      {/* Modal */}
+      <Modal
+        isOpen={!!editing}
+        onClose={() => { setEditing(null); setIsCreating(false); }}
+        title={isCreating ? "Create Education" : "Edit Education"}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Degree *</label>
+            <input
+              type="text"
+              value={editing?.degree || ""}
+              onChange={(e) => setEditing({ ...editing, degree: e.target.value })}
+              className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+              style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Institution *</label>
+            <input
+              type="text"
+              value={editing?.institution || ""}
+              onChange={(e) => setEditing({ ...editing, institution: e.target.value })}
+              className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+              style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-white/80 text-sm mb-1">Year *</label>
+              <input
+                type="text"
+                value={editing?.year || ""}
+                onChange={(e) => setEditing({ ...editing, year: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Year *</label>
-                <input
-                  type="text"
-                  value={editing?.year || ""}
-                  onChange={(e) => setEditing({ ...editing, year: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Sort Order</label>
-                <input
-                  type="number"
-                  value={editing?.sortOrder ?? 0}
-                  onChange={(e) => setEditing({ ...editing, sortOrder: parseInt(e.target.value) || 0 })}
-                  className="w-24 px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleSave}
-                disabled={saving || !editing?.degree || !editing?.institution || !editing?.year}
-                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50"
-                style={{ background: "rgba(71,184,255,0.1)", border: "1px solid rgba(71,184,255,0.3)", color: "#47b8ff" }}
-              >
-                {saving ? "Saving..." : "Save"}
-              </button>
-              <button
-                onClick={() => { setEditing(null); setIsCreating(false); }}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-all duration-200 cursor-pointer"
-              >
-                Cancel
-              </button>
+            <div>
+              <label className="block text-white/80 text-sm mb-1">Sort Order</label>
+              <input
+                type="number"
+                value={editing?.sortOrder ?? 0}
+                onChange={(e) => setEditing({ ...editing, sortOrder: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              />
             </div>
           </div>
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={handleSave}
+              disabled={saving || !editing?.degree || !editing?.institution || !editing?.year}
+              className="px-5 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50"
+              style={{ background: "rgba(71,184,255,0.1)", border: "1px solid rgba(71,184,255,0.3)", color: "#47b8ff" }}
+            >
+              {saving ? "Saving..." : "Save"}
+            </button>
+            <button
+              onClick={() => { setEditing(null); setIsCreating(false); }}
+              className="px-5 py-2 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-all duration-200 cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      )}
+      </Modal>
 
       <div className="space-y-3">
         {items.map((item) => (

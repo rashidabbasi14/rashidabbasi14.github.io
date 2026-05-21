@@ -37,13 +37,23 @@ export default function Navbar({ isAdmin }: NavbarProps) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
             {isAdmin && (
-              <Link href="/admin" className="text-white/70 hover:text-white text-sm hidden md:block">
-                &larr; Dashboard
+              <>
+                <Link
+                  href="/"
+                  className="text-white/70 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10 hidden md:block"
+                >
+                  View Site
+                </Link>
+                <Link href="/admin" className="text-white/70 hover:text-white text-sm hidden md:block">
+                  &larr; Dashboard
+                </Link>
+              </>
+            )}
+            {!isAdmin && (
+              <Link href="/" className="text-white font-bold text-lg tracking-wide">
+                Rashid Ahmed Abbasi
               </Link>
             )}
-            <Link href={isAdmin ? "/admin" : "/"} className="text-white font-bold text-lg tracking-wide">
-              {isAdmin ? "Admin Panel" : "Rashid Ahmed Abbasi"}
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -65,19 +75,12 @@ export default function Navbar({ isAdmin }: NavbarProps) {
           <div className="hidden md:flex items-center space-x-1">
             {isAdmin ? (
               <>
-                <NavLink href="/admin">Dashboard</NavLink>
                 <NavLink href="/admin/profile">Profile</NavLink>
                 <NavLink href="/admin/projects">Projects</NavLink>
                 <NavLink href="/admin/employment">Employment</NavLink>
                 <NavLink href="/admin/skills">Skills</NavLink>
                 <NavLink href="/admin/certifications">Certifications</NavLink>
                 <NavLink href="/admin/education">Education</NavLink>
-                <Link
-                  href="/"
-                  className="text-white/70 hover:text-white px-3 py-2 rounded-xl text-sm font-semibold tracking-wide uppercase transition-all duration-200 hover:bg-white/10"
-                >
-                  View Site
-                </Link>
                 <div className="ml-2">
                   <UserButton />
                 </div>
@@ -104,7 +107,6 @@ export default function Navbar({ isAdmin }: NavbarProps) {
           <div className="md:hidden pb-4 space-y-1">
             {isAdmin ? (
               <>
-                <MobileNavLink href="/admin" onClick={handleMobileLinkClick}>Dashboard</MobileNavLink>
                 <MobileNavLink href="/admin/profile" onClick={handleMobileLinkClick}>Profile</MobileNavLink>
                 <MobileNavLink href="/admin/projects" onClick={handleMobileLinkClick}>Projects</MobileNavLink>
                 <MobileNavLink href="/admin/employment" onClick={handleMobileLinkClick}>Employment</MobileNavLink>

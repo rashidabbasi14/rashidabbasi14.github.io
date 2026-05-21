@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import RichTextEditor from "@/components/RichTextEditor";
+import Modal from "@/components/Modal";
 
 interface Certification {
   id: number;
@@ -20,6 +21,8 @@ export default function AdminCertifications() {
   const [editing, setEditing] = useState<Partial<Certification> | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchItems();
@@ -34,6 +37,31 @@ export default function AdminCertifications() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: formData });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.url || null;
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const url = await uploadFile(file);
+    if (url) {
+      setEditing((prev) => ({ ...prev, image: url }));
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleRemoveImage = () => {
+    setEditing((prev) => ({ ...prev, image: null }));
   };
 
   const handleSave = async () => {
@@ -89,78 +117,86 @@ export default function AdminCertifications() {
         </button>
       </div>
 
-      {(editing || isCreating) && (
-        <div className="portfolio-card p-6 mb-6">
-          <h2 className="text-white font-semibold text-lg mb-4">{isCreating ? "Create" : "Edit"} Certification</h2>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Title *</label>
-                <input
-                  type="text"
-                  value={editing?.title || ""}
-                  onChange={(e) => setEditing({ ...editing, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Subtitle</label>
-                <input
-                  type="text"
-                  value={editing?.subtitle || ""}
-                  onChange={(e) => setEditing({ ...editing, subtitle: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
+      {/* Modal */}
+      <Modal
+        isOpen={!!editing}
+        onClose={() => { setEditing(null); setIsCreating(false); }}
+        title={isCreating ? "Create Certification" : "Edit Certification"}
+        image={editing?.image}
+        imageShape="rounded"
+        imageWidth={160}
+        imageHeight={100}
+      >
+        <div className="space-y-4">
+          {/* Image upload controls */}
+          <div className="flex flex-wrap items-center gap-2">
+            <input
+              type="text"
+              placeholder="Or paste image URL..."
+              value={editing?.image || ""}
+              onChange={(e) => setEditing({ ...editing, image: e.target.value || null })}
+              className="flex-1 min-w-[200px] px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+              style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 whitespace-nowrap"
+              style={{ background: "rgba(71,184,255,0.1)", border: "1px solid rgba(71,184,255,0.3)", color: "#47b8ff" }}
+            >
+              {uploading ? "Uploading..." : "Upload"}
+            </button>
+            {editing?.image && (
+              <button
+                onClick={handleRemoveImage}
+                className="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap"
+                style={{ background: "rgba(255,71,71,0.1)", border: "1px solid rgba(255,71,71,0.3)", color: "#ff4747" }}
+              >
+                Remove
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-white/80 text-sm mb-1">Title *</label>
+              <input
+                type="text"
+                value={editing?.title || ""}
+                onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+                autoFocus
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Image URL</label>
-                <input
-                  type="text"
-                  value={editing?.image || ""}
-                  onChange={(e) => setEditing({ ...editing, image: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">URL</label>
-                <input
-                  type="text"
-                  value={editing?.url || ""}
-                  onChange={(e) => setEditing({ ...editing, url: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                />
-              </div>
+            <div>
+              <label className="block text-white/80 text-sm mb-1">Subtitle</label>
+              <input
+                type="text"
+                value={editing?.subtitle || ""}
+                onChange={(e) => setEditing({ ...editing, subtitle: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Description <span className="text-white/40 text-xs">(HTML supported)</span></label>
-                <RichTextEditor
-                  value={editing?.description || ""}
-                  onChange={(value) => setEditing({ ...editing, description: value })}
-                  rows={3}
-                  placeholder="Certification details... HTML tags like <b>, <i> are supported"
-                />
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Tags (comma separated)</label>
-                <input
-                  type="text"
-                  value={editing?.tags?.join(", ") || ""}
-                  onChange={(e) => setEditing({
-                    ...editing,
-                    tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-                  })}
-                  className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
-                  placeholder="e.g. JavaScript, React, Node.js"
-                />
-              </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-white/80 text-sm mb-1">URL</label>
+              <input
+                type="text"
+                value={editing?.url || ""}
+                onChange={(e) => setEditing({ ...editing, url: e.target.value })}
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              />
             </div>
             <div>
               <label className="block text-white/80 text-sm mb-1">Sort Order</label>
@@ -168,29 +204,52 @@ export default function AdminCertifications() {
                 type="number"
                 value={editing?.sortOrder ?? 0}
                 onChange={(e) => setEditing({ ...editing, sortOrder: parseInt(e.target.value) || 0 })}
-                className="w-24 px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+                className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
                 style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
               />
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleSave}
-                disabled={saving || !editing?.title}
-                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50"
-                style={{ background: "rgba(71,184,255,0.1)", border: "1px solid rgba(71,184,255,0.3)", color: "#47b8ff" }}
-              >
-                {saving ? "Saving..." : "Save"}
-              </button>
-              <button
-                onClick={() => { setEditing(null); setIsCreating(false); }}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-all duration-200 cursor-pointer"
-              >
-                Cancel
-              </button>
-            </div>
+          </div>
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Description <span className="text-white/40 text-xs">(HTML supported)</span></label>
+            <RichTextEditor
+              value={editing?.description || ""}
+              onChange={(value) => setEditing({ ...editing, description: value })}
+              rows={3}
+              placeholder="Certification details... HTML tags like <b>, <i> are supported"
+            />
+          </div>
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Tags (comma separated)</label>
+            <input
+              type="text"
+              value={editing?.tags?.join(", ") || ""}
+              onChange={(e) => setEditing({
+                ...editing,
+                tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
+              })}
+              className="w-full px-3 py-2 rounded-lg text-white focus:outline-none focus:ring-2"
+              style={{ backgroundColor: "rgba(11,35,65,0.6)", border: "1px solid rgba(71,184,255,0.15)" }}
+              placeholder="e.g. JavaScript, React, Node.js"
+            />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={handleSave}
+              disabled={saving || !editing?.title}
+              className="px-5 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50"
+              style={{ background: "rgba(71,184,255,0.1)", border: "1px solid rgba(71,184,255,0.3)", color: "#47b8ff" }}
+            >
+              {saving ? "Saving..." : "Save"}
+            </button>
+            <button
+              onClick={() => { setEditing(null); setIsCreating(false); }}
+              className="px-5 py-2 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-all duration-200 cursor-pointer"
+            >
+              Cancel
+            </button>
           </div>
         </div>
-      )}
+      </Modal>
 
       <div className="space-y-3">
         {items.map((item) => (
