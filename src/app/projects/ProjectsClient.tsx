@@ -63,8 +63,9 @@ export default function ProjectsClient({ projects: initialProjects, userId, user
       fetch(`/api/profile${query}`).then((res) => res.json()),
     ])
       .then(([projectsData, profileData]) => {
-        if (!initialProjects) setProjects(projectsData);
-        setProjects(projectsData);
+        const sorted = (projectsData as Project[]).sort((a, b) => (b.priority ? 1 : 0) - (a.priority ? 1 : 0));
+        if (!initialProjects) setProjects(sorted);
+        setProjects(sorted);
         setProfile(profileData);
       })
       .catch(console.error)

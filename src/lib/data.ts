@@ -9,7 +9,7 @@ import {
   certifications,
   users,
 } from "@/db/schema";
-import { eq, and, count } from "drizzle-orm";
+import { eq, and, count, desc } from "drizzle-orm";
 
 // ─── User Lookup ──────────────────────────────────────────────────────────────
 
@@ -93,7 +93,7 @@ export async function getProjects(userId: string) {
     .select()
     .from(projects)
     .where(eq(projects.userId, userId))
-    .orderBy(projects.sortOrder);
+    .orderBy(desc(projects.priority), projects.sortOrder);
 }
 
 export async function getProjectById(id: number, userId: string) {
